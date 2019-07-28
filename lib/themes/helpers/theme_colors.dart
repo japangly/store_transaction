@@ -8,3 +8,4 @@ const textColor = Color(0xFF4F4F4F);
 const whiteColor = Colors.white;
 const blackColor = Colors.black;
 const blueColor = Colors.blue;
+const greyColor = Color(0xFF404040);
