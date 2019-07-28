@@ -5,7 +5,7 @@ void main() {
   runApp(
     MaterialApp(
       title: 'Material App',
-      home: new Dashboard(),
+      home: Dashboard(),
     ),
   );
 }
