@@ -39,11 +39,17 @@ class _DashboardState extends State<Dashboard> {
   Widget service() {
     return Container(
       child: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
+          List<DocumentSnapshot> documents = await Database().getAllCollection(
+            collection: 'products',
+            sortBy: 'name',
+            order: false,
+          );
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => ListTotal(),
+              builder: (BuildContext context) =>
+                  ListTotal(documents: documents),
             ),
           );
         },

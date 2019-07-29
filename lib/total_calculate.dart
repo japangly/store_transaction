@@ -1,19 +1,27 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:recase/recase.dart';
 
 import 'dialog/add_service_dialog.dart';
 import 'dialog/receipt_dialog.dart';
+import 'functions/firebase_firestore.dart';
 import 'helper/search_library.dart';
 import 'sale_card.dart';
 import 'service_card.dart';
 
 class ListTotal extends StatefulWidget {
+  const ListTotal({Key key, this.documents}) : super(key: key);
+
+  final List<DocumentSnapshot> documents;
+
   @override
   _ListTotalState createState() => _ListTotalState();
 }
 
 class _ListTotalState extends State<ListTotal> {
+  final _formKey = new GlobalKey<FormState>();
+  String _name = 'No one';
   final _names = [
     'Igor Minar',
     'Brad Green',
@@ -26,33 +34,42 @@ class _ListTotalState extends State<ListTotal> {
     'Daniel Nadasi',
   ];
 
-  String _name = 'No one';
-
-  final _formKey = new GlobalKey<FormState>();
-
   _buildMaterialSearchPage(BuildContext context) {
     return new MaterialPageRoute<String>(
-        settings: new RouteSettings(
+        settings: RouteSettings(
           name: 'material_search',
           isInitialRoute: false,
         ),
         builder: (BuildContext context) {
-          return new Material(
-            child: new MaterialSearch<String>(
-              placeholder: 'Search',
-              results: _names
-                  .map((String v) => new MaterialSearchResult<String>(
-                        text: "Mr(s). $v",
-                      ))
-                  .toList(),
-              filter: (dynamic value, String criteria) {
-                return value.toLowerCase().trim().contains(
-                    new RegExp(r'' + criteria.toLowerCase().trim() + ''));
-              },
-              onSelect: (dynamic value) => Navigator.of(context).pop(value),
-              onSubmit: (String value) => Navigator.of(context).pop(value),
-            ),
-          );
+          return StreamBuilder<QuerySnapshot>(
+              stream: Database().getStreamCollection(
+                collection: 'products',
+                orderBy: 'name',
+                isDescending: false,
+              ),
+              builder: (context, snapshot) {
+                return Material(
+                  child: MaterialSearch<String>(
+                    placeholder: 'Search',
+                    results: widget.documents
+                        .map((DocumentSnapshot v) =>
+                            MaterialSearchResult<String>(
+                              imageSrc: v.data['image'],
+                              value: v,
+                              text: ReCase(v.data['name']).titleCase,
+                            ))
+                        .toList(),
+                    filter: (DocumentSnapshot value, String criteria) {
+                      return value.data['name'].toLowerCase().trim().contains(
+                          RegExp(r'' + criteria.toLowerCase().trim() + ''));
+                    },
+                    onSelect: (dynamic value) =>
+                        Navigator.of(context).pop(value),
+                    onSubmit: (String value) =>
+                        Navigator.of(context).pop(value),
+                  ),
+                );
+              });
         });
   }
 
