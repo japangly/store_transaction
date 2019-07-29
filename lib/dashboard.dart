@@ -19,7 +19,7 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       appBar: AppBar(
         elevation: 2.0,
-        backgroundColor: blueColor,
+        backgroundColor: Colors.pinkAccent,
         title: Text('Dashboard',
             style: TextStyle(color: Colors.white, fontSize: 30.0)),
         leading: IconButton(
@@ -167,7 +167,7 @@ class _DashboardState extends State<Dashboard> {
               ),
             ),
           ),
-          productInUse(
+          productSold(
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Row(
@@ -317,9 +317,9 @@ class _DashboardState extends State<Dashboard> {
             child: child));
   }
 
-  Widget productInUse(Widget child, {Function() onTap}) {
+  Widget productSold(Widget child, {Function() onTap}) {
     return Material(
-        color: Colors.orange,
+        color: pinkColor,
         elevation: 14.0,
         borderRadius: BorderRadius.circular(8.0),
         shadowColor: Color(0x802196F3),

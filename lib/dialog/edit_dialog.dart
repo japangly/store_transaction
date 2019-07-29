@@ -15,8 +15,7 @@ class EditDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       elevation: 10,
-      contentPadding:
-          const EdgeInsets.only(top: 20.0, right: 40, left: 40, bottom: 20.0),
+      contentPadding: const EdgeInsets.only(top: 30.0, right: 40, left: 40),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(10.0),
@@ -24,7 +23,8 @@ class EditDialog extends StatelessWidget {
       ),
       content: SingleChildScrollView(
         child: Container(
-          width: Environment().getWidth(width: 10.0),
+          width: Environment().getWidth(width: 13),
+          height: Environment().getHeight(height: 13),
           child: Column(
             children: <Widget>[
               Column(
@@ -36,7 +36,7 @@ class EditDialog extends StatelessWidget {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 20.0),
+                padding: const EdgeInsets.only(top: 25.0),
                 child: FormBuilderTextField(
                   attribute: "quantity",
                   style: font15Grey,
@@ -49,7 +49,7 @@ class EditDialog extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 10.0),
+                padding: const EdgeInsets.only(top: 25.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[

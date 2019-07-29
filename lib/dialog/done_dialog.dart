@@ -9,20 +9,20 @@ class DoneDialog extends StatelessWidget {
     return AlertDialog(
       elevation: 10,
       contentPadding:
-          const EdgeInsets.only(top: 50.0, right: 20, left: 20, bottom: 0.0),
+          const EdgeInsets.only(top: 20.0, right: 20, left: 20, bottom: 0.0),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0))),
       content: SingleChildScrollView(
         child: Container(
-          width: Environment().getWidth(width: 10.0),
-          height: Environment().getHeight(height: 10.0),
+          width: Environment().getWidth(width: 10),
+          height: Environment().getHeight(height: 10),
           child: Column(
             children: <Widget>[
               Column(
                 children: <Widget>[
                   Icon(
                     Icons.check_circle_outline,
-                    size: 70,
+                    size: 90.0,
                     color: confirmColor,
                   ),
                   Text(

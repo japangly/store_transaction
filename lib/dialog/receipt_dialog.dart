@@ -26,7 +26,7 @@ class ReceiptDialog extends StatelessWidget {
                       children: <Widget>[
                         Icon(
                           Icons.receipt,
-                          color: Colors.blue,
+                          color: Colors.pinkAccent,
                           size: 70.0,
                         ),
                         Text(
@@ -115,7 +115,7 @@ class ReceiptDialog extends StatelessWidget {
                           Radius.circular(8.0),
                         )),
                         textColor: Colors.white,
-                        color: Colors.blue,
+                        color: Colors.pinkAccent,
                         padding: const EdgeInsets.all(15.0),
                         child: new Text(
                           "Print",

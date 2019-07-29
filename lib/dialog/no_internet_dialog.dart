@@ -39,7 +39,7 @@ class NoInternetDialog extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
                     child: Text(
-                      'Please check your internet connection and try again.',
+                      'Please check your internet connection and try again',
                       style: font20Grey,
                       textAlign: TextAlign.center,
                     ),
