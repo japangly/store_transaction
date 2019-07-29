@@ -2,21 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:store_transaction/dialog/camera_dialog.dart';
-import 'package:store_transaction/dialog/delete_dialog.dart';
-import 'package:store_transaction/dialog/done_dialog.dart';
-import 'package:store_transaction/dialog/duplicate_dialog.dart';
-import 'package:store_transaction/dialog/edit_dialog.dart';
-import 'package:store_transaction/dialog/email_not_found_dialog.dart';
-import 'package:store_transaction/dialog/error_dialog.dart';
-import 'package:store_transaction/dialog/fail_dialog.dart';
-import 'package:store_transaction/dialog/no_internet_dialog.dart';
-import 'package:store_transaction/dialog/print_dialog.dart';
 import 'package:store_transaction/dialog/receipt_dialog.dart';
 import 'package:store_transaction/themes/helpers/fonts.dart';
-import 'package:store_transaction/themes/helpers/theme_colors.dart' as prefix0;
 import 'env.dart';
-import 'themes/helpers/theme_colors.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
