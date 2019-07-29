@@ -25,7 +25,7 @@ class _ServicePriceCardState extends State<ServicePriceCard> {
                 child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(
-                      Radius.circular(8.0),
+                      Radius.circular(16.0),
                     ),
                   ),
                   elevation: 4.0,
@@ -98,12 +98,23 @@ class _ServicePriceCardState extends State<ServicePriceCard> {
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(16.0),
+                ),
+              ),
               elevation: 5.0,
-              child: Image.network(
-                'https://sleepmatters.ie/wp-content/uploads/2018/05/Child-Bath-Every-Night.jpg',
-                height: 230.0,
-                width: 230.0,
-                fit: BoxFit.fitHeight,
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(16.0),
+                ),
+                child: Image.network(
+                  'https://sleepmatters.ie/wp-content/uploads/2018/05/Child-Bath-Every-Night.jpg',
+                  height: 230.0,
+                  width: 230.0,
+                  fit: BoxFit.fitHeight,
+                  scale: 30.0,
+                ),
               ),
             ),
           ),

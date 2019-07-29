@@ -1,7 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:store_transaction/sale_card.dart';
-import 'package:store_transaction/service_card.dart';
 
 import 'dialog/receipt_dialog.dart';
 import 'helper/counter.dart';
@@ -20,14 +18,17 @@ class _ConfirmDeductFromStockState extends State<ConfirmDeductFromStock> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('List Stock'),
+        title: AutoSizeText(
+          'List Stock',
+          minFontSize: 30.0,
+        ),
       ),
       body: ListView(
         scrollDirection: Axis.horizontal,
         children: <Widget>[
           DeductStockCard(),
-          ServicePriceCard(),
-          SaleItemCard(),
+          DeductStockCard(),
+          DeductStockCard(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -72,7 +73,7 @@ class _DeductStockCardState extends State<DeductStockCard> {
                 child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(
-                      Radius.circular(8.0),
+                      Radius.circular(16.0),
                     ),
                   ),
                   elevation: 4.0,
@@ -153,12 +154,22 @@ class _DeductStockCardState extends State<DeductStockCard> {
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Card(
-              elevation: 5.0,
-              child: Image.network(
-                'https://images-na.ssl-images-amazon.com/images/I/71QTkaXtxjL._SY355_.jpg',
-                height: 230.0,
-                width: 230.0,
-                fit: BoxFit.fitHeight,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(16.0),
+                ),
+              ),
+              elevation: 4.0,
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(16.0),
+                ),
+                child: Image.network(
+                  'https://images-na.ssl-images-amazon.com/images/I/71QTkaXtxjL._SY355_.jpg',
+                  height: 230.0,
+                  width: 230.0,
+                  fit: BoxFit.fitHeight,
+                ),
               ),
             ),
           ),
