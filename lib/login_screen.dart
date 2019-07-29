@@ -115,13 +115,7 @@ class _LoginState extends State<LoginScreen> {
                                       Icon(Icons.arrow_forward)
                                     ],
                                   ),
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (_) {
-                                          return ReceiptDialog();
-                                        });
-                                  },
+                                  onPressed: () {},
                                 ),
                               ),
                             ],
