@@ -14,6 +14,121 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  Widget sale() {
+    return Container(
+      child: FloatingActionButton(
+        backgroundColor: Colors.lightBlue,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => ConfirmDeductFromStock(),
+            ),
+          );
+        },
+        heroTag: "s1",
+        tooltip: 'sale',
+        child: Icon(Icons.store),
+      ),
+    );
+  }
+
+  Widget service() {
+    return Container(
+      child: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => ListTotal(),
+            ),
+          );
+        },
+        backgroundColor: Colors.amber,
+        heroTag: "s2",
+        tooltip: 'service',
+        child: Icon(Icons.content_cut),
+      ),
+    );
+  }
+
+  Widget normalQueue(Widget child, {Function() onTap}) {
+    return Material(
+        elevation: 14.0,
+        borderRadius: BorderRadius.circular(8.0),
+        shadowColor: Color(0x802196F3),
+        child: InkWell(
+            // Do onTap() if it isn't null, otherwise do print()
+            onTap: onTap != null
+                ? () => onTap()
+                : () {
+                    print('Not set yet');
+                  },
+            child: child));
+  }
+
+  Widget productSold(Widget child, {Function() onTap}) {
+    return Material(
+        color: pinkColor,
+        elevation: 14.0,
+        borderRadius: BorderRadius.circular(8.0),
+        shadowColor: Color(0x802196F3),
+        child: InkWell(
+            // Do onTap() if it isn't null, otherwise do print()
+            onTap: onTap != null
+                ? () => onTap()
+                : () {
+                    print('Not set yet');
+                  },
+            child: child));
+  }
+
+  Widget vipQueue(Widget child, {Function() onTap}) {
+    return Material(
+        elevation: 14.0,
+        borderRadius: BorderRadius.circular(8.0),
+        shadowColor: Color(0x802196F3),
+        child: InkWell(
+            // Do onTap() if it isn't null, otherwise do print()
+            onTap: onTap != null
+                ? () => onTap()
+                : () {
+                    print('Not set yet');
+                  },
+            child: child));
+  }
+
+  Widget history(Widget child, {Function() onTap}) {
+    return Material(
+        elevation: 14.0,
+        borderRadius: BorderRadius.circular(8.0),
+        shadowColor: Color(0x802196F3),
+        child: InkWell(
+            // Do onTap() if it isn't null, otherwise do print()
+            onTap: onTap != null
+                ? () => onTap()
+                : () {
+                    print('Not set yet');
+                  },
+            child: child));
+  }
+
+  Widget todayEarnings(Widget child, {Function() onTap}) {
+    return Material(
+        color: Colors.lightBlueAccent,
+        elevation: 14.0,
+        borderRadius: BorderRadius.circular(8.0),
+        shadowColor: Color(0x802196F3),
+        child: InkWell(
+            // Do onTap() if it isn't null, otherwise do print()
+            onTap: onTap != null
+                ? () => onTap()
+                : () {
+                    print('Not set yet');
+                  },
+            child: child));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -262,120 +377,5 @@ class _DashboardState extends State<Dashboard> {
         animatedIconData: AnimatedIcons.menu_close,
       ),
     );
-  }
-
-  Widget sale() {
-    return Container(
-      child: FloatingActionButton(
-        backgroundColor: Colors.lightBlue,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => ConfirmDeductFromStock(),
-            ),
-          );
-        },
-        heroTag: "s1",
-        tooltip: 'sale',
-        child: Icon(Icons.store),
-      ),
-    );
-  }
-
-  Widget service() {
-    return Container(
-      child: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => ListTotal(),
-            ),
-          );
-        },
-        backgroundColor: Colors.amber,
-        heroTag: "s2",
-        tooltip: 'service',
-        child: Icon(Icons.content_cut),
-      ),
-    );
-  }
-
-  Widget normalQueue(Widget child, {Function() onTap}) {
-    return Material(
-        elevation: 14.0,
-        borderRadius: BorderRadius.circular(8.0),
-        shadowColor: Color(0x802196F3),
-        child: InkWell(
-            // Do onTap() if it isn't null, otherwise do print()
-            onTap: onTap != null
-                ? () => onTap()
-                : () {
-                    print('Not set yet');
-                  },
-            child: child));
-  }
-
-  Widget productSold(Widget child, {Function() onTap}) {
-    return Material(
-        color: pinkColor,
-        elevation: 14.0,
-        borderRadius: BorderRadius.circular(8.0),
-        shadowColor: Color(0x802196F3),
-        child: InkWell(
-            // Do onTap() if it isn't null, otherwise do print()
-            onTap: onTap != null
-                ? () => onTap()
-                : () {
-                    print('Not set yet');
-                  },
-            child: child));
-  }
-
-  Widget vipQueue(Widget child, {Function() onTap}) {
-    return Material(
-        elevation: 14.0,
-        borderRadius: BorderRadius.circular(8.0),
-        shadowColor: Color(0x802196F3),
-        child: InkWell(
-            // Do onTap() if it isn't null, otherwise do print()
-            onTap: onTap != null
-                ? () => onTap()
-                : () {
-                    print('Not set yet');
-                  },
-            child: child));
-  }
-
-  Widget history(Widget child, {Function() onTap}) {
-    return Material(
-        elevation: 14.0,
-        borderRadius: BorderRadius.circular(8.0),
-        shadowColor: Color(0x802196F3),
-        child: InkWell(
-            // Do onTap() if it isn't null, otherwise do print()
-            onTap: onTap != null
-                ? () => onTap()
-                : () {
-                    print('Not set yet');
-                  },
-            child: child));
-  }
-
-  Widget todayEarnings(Widget child, {Function() onTap}) {
-    return Material(
-        color: Colors.lightBlueAccent,
-        elevation: 14.0,
-        borderRadius: BorderRadius.circular(8.0),
-        shadowColor: Color(0x802196F3),
-        child: InkWell(
-            // Do onTap() if it isn't null, otherwise do print()
-            onTap: onTap != null
-                ? () => onTap()
-                : () {
-                    print('Not set yet');
-                  },
-            child: child));
   }
 }

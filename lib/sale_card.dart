@@ -31,7 +31,7 @@ class _SaleItemCardState extends State<SaleItemCard> {
                 child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(
-                      Radius.circular(8.0),
+                      Radius.circular(16.0),
                     ),
                   ),
                   elevation: 4.0,
@@ -111,6 +111,11 @@ class _SaleItemCardState extends State<SaleItemCard> {
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(16.0),
+                ),
+              ),
               elevation: 5.0,
               child: Image.network(
                 'https://www.beatsbydre.com/content/dam/beats/web/pcp/headphones/solo3_wireless/_0001_MNEN2-RGB-bttm.png.small.2x.png',
