@@ -2,8 +2,10 @@ import 'package:animated_floatactionbuttons/animated_floatactionbuttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:store_transaction/print.dart';
+import 'package:store_transaction/stock_screen.dart';
 import 'package:store_transaction/themes/helpers/fonts.dart';
 import 'package:store_transaction/themes/helpers/theme_colors.dart';
+import 'package:store_transaction/total_calculate.dart';
 import 'package:store_transaction/user_profile.dart';
 
 class Dashboard extends StatefulWidget {
@@ -266,9 +268,16 @@ class _DashboardState extends State<Dashboard> {
     return Container(
       child: FloatingActionButton(
         backgroundColor: Colors.lightBlue,
-        onPressed: null,
-        heroTag: "Sale",
-        tooltip: 'Sale',
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => ConfirmDeductFromStock(),
+            ),
+          );
+        },
+        heroTag: "s1",
+        tooltip: 'sale',
         child: Icon(Icons.store),
       ),
     );
@@ -277,10 +286,17 @@ class _DashboardState extends State<Dashboard> {
   Widget service() {
     return Container(
       child: FloatingActionButton(
-        onPressed: null,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => ListTotal(),
+            ),
+          );
+        },
         backgroundColor: Colors.amber,
-        heroTag: "Service",
-        tooltip: 'Service',
+        heroTag: "s2",
+        tooltip: 'service',
         child: Icon(Icons.content_cut),
       ),
     );
