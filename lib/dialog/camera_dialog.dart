@@ -15,7 +15,8 @@ class CameraDialog extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(10.0))),
       content: SingleChildScrollView(
         child: Container(
-          width: Environment().getWidth(width: 10),
+          width: Environment().getWidth(width: 13),
+          height: Environment().getHeight(height: 13),
           child: Column(
             children: <Widget>[
               Column(
@@ -23,20 +24,20 @@ class CameraDialog extends StatelessWidget {
                   Icon(
                     MaterialCommunityIcons.getIconData("camera-off"),
                     color: Colors.redAccent,
-                    size: 60.0,
+                    size: 70.0,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
                       "Camera Access",
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(fontSize: 25.0),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
                     child: Text(
                       'Please allow access to your camera to take photos',
-                      style: font15Grey,
+                      style: font20Grey,
                       textAlign: TextAlign.center,
                     ),
                   )

@@ -86,3 +86,13 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+
+  #  - images/a_dot_ham.jpeg
+  fonts:
+  - family: Realistica
+    fonts:
+      - asset: assets/fonts/Realistica.otf
+  assets:
+    - assets/images/splash_screen.png
+    - assets/images/login_screen.png

@@ -19,12 +19,12 @@ class _PrintDialogState extends State<PrintDialog> {
     return AlertDialog(
       elevation: 10,
       contentPadding:
-          const EdgeInsets.only(top: 20.0, right: 20, left: 20, bottom: 0.0),
+          const EdgeInsets.only(top: 20.0, right: 20, left: 20, bottom: 10.0),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0))),
       content: SingleChildScrollView(
         child: Container(
-          width: Environment().getWidth(width: 10),
+          width: Environment().getWidth(width: 13),
           child: Column(
             children: <Widget>[
               Column(
@@ -32,13 +32,13 @@ class _PrintDialogState extends State<PrintDialog> {
                   Icon(
                     Ionicons.getIconData("md-paper"),
                     color: Colors.blue,
-                    size: 60.0,
+                    size: 70.0,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 20.0),
                     child: Text(
                       'You are printing a report of ${widget.selectedDay}',
-                      style: TextStyle(fontSize: 15),
+                      style: TextStyle(fontSize: 20),
                       textAlign: TextAlign.center,
                     ),
                   ),

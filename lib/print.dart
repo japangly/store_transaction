@@ -17,6 +17,7 @@ class _PrintScreenState extends State<PrintScreen> {
     return Container(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.pinkAccent,
           centerTitle: true,
           title: Column(
             children: <Widget>[
@@ -39,7 +40,7 @@ class _PrintScreenState extends State<PrintScreen> {
                   Icon(
                     SimpleLineIcons.getIconData("printer"),
                     color: Colors.blue,
-                    size: 60.0,
+                    size: 100.0,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
@@ -77,7 +78,7 @@ class _PrintScreenState extends State<PrintScreen> {
                           colorButton: cancelColor,
                         ),
                         SizedBox(
-                          width: 10,
+                          width: 20,
                         ),
                         CustomButton(
                           onPressed: () {

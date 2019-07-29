@@ -15,6 +15,7 @@ class _UserProfileState extends State<UserProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.pinkAccent,
           centerTitle: true,
           title: Text('Profile',
               style: TextStyle(color: Colors.white, fontSize: 30.0)),
@@ -117,7 +118,7 @@ class _UserProfileState extends State<UserProfile> {
                                       Radius.circular(8.0),
                                     )),
                                     textColor: Colors.white,
-                                    color: Colors.blue,
+                                    color: Colors.pinkAccent,
                                     padding: const EdgeInsets.all(15.0),
                                     child: new Text(
                                       "Logout",
