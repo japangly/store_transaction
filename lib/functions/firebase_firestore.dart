@@ -99,6 +99,7 @@ class Database {
       return documentSnapshot;
     } catch (error) {
       print(error);
+      return null;
     }
   }
 
@@ -115,6 +116,24 @@ class Database {
           .getDocuments();
       return snapshot.documents.first;
     } catch (e) {
+      return null;
+    }
+  }
+
+  Future<List<DocumentSnapshot>> getHistoryProduction(
+      {@required String collection,
+      @required String field,
+      @required Timestamp dateTime,
+      @required Timestamp until}) async {
+    try {
+      QuerySnapshot snapshot = await Firestore.instance
+          .collection(collection)
+          .where(field, isGreaterThan: dateTime)
+          .where(field, isLessThan: until)
+          .getDocuments();
+      return snapshot.documents;
+    } catch (e) {
+      print(e);
       return null;
     }
   }

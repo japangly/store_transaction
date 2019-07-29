@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_icons/simple_line_icons.dart';
-import 'package:store_transaction/themes/helpers/buttons.dart';
-import 'package:store_transaction/themes/helpers/fonts.dart';
+
 import 'dialog/print_dialog.dart';
+import 'themes/helpers/buttons.dart';
+import 'themes/helpers/fonts.dart';
 import 'themes/helpers/theme_colors.dart';
 
 class PrintScreen extends StatefulWidget {
@@ -60,9 +61,9 @@ class _PrintScreenState extends State<PrintScreen> {
                                 showTitleActions: true,
                                 minTime: DateTime(2019, 1, 1),
                                 onChanged: (date) {
-                              print('change $date');
+                              // print('change $date');
                             }, onConfirm: (date) {
-                              print('confirm $date');
+                              // print('confirm $date');
                               showDialog(
                                   context: context,
                                   builder: (_) {

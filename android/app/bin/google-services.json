@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "605394527263",
+    "firebase_url": "https://mickey-salon.firebaseio.com",
+    "project_id": "mickey-salon",
+    "storage_bucket": "mickey-salon.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:605394527263:android:cbe3aaa681a13bd5",
+        "android_client_info": {
+          "package_name": "com.jpeg.store_stockroom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "605394527263-2bjcln5ehk6gfih8v4hdi2080mui2frn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jpeg.store_stockroom",
+            "certificate_hash": "8a87f3eea998b6fdd9e0cdc9bbc705aa24d2f58a"
+          }
+        },
+        {
+          "client_id": "605394527263-l7s8umluangdtek34jgi6oqujb6tlia6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGztB7Af3bGlvRcBXaijr5PmSuA3u-jm8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "605394527263-l7s8umluangdtek34jgi6oqujb6tlia6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "605394527263-3do500fpuhkvi6f988u566lb1s07mbbr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.jpeg.storeTransaction"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:605394527263:android:0b04fe1378edb713",
+        "android_client_info": {
+          "package_name": "com.jpeg.store_transaction"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "605394527263-le2a4ov0q43biqi1a6co5be1lkvf3e33.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jpeg.store_transaction",
+            "certificate_hash": "2912e300aa65bf358a0cb6367fc38b7e4643bcb6"
+          }
+        },
+        {
+          "client_id": "605394527263-l7s8umluangdtek34jgi6oqujb6tlia6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGztB7Af3bGlvRcBXaijr5PmSuA3u-jm8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "605394527263-l7s8umluangdtek34jgi6oqujb6tlia6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "605394527263-3do500fpuhkvi6f988u566lb1s07mbbr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.jpeg.storeTransaction"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
