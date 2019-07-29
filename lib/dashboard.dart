@@ -1,6 +1,9 @@
 import 'package:animated_floatactionbuttons/animated_floatactionbuttons.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:store_transaction/functions/firebase_firestore.dart';
 import 'package:store_transaction/print.dart';
 import 'package:store_transaction/stock_screen.dart';
 import 'package:store_transaction/themes/helpers/fonts.dart';
@@ -129,6 +132,7 @@ class _DashboardState extends State<Dashboard> {
             child: child));
   }
 
+  SharedPreferences sharedPreferences;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -143,12 +147,16 @@ class _DashboardState extends State<Dashboard> {
             color: Colors.white,
             size: 30.0,
           ),
-          onPressed: () {
+          onPressed: () async {
+            sharedPreferences = await SharedPreferences.getInstance();
+            print(sharedPreferences.get('keyUserId'));
+            DocumentSnapshot ducuments = await Database()
+                .getCurrentUserInfo(userId: sharedPreferences.get('keyUserId'));
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return UserProfile();
+                  return UserProfile(documentSnapshot: ducuments);
                 },
               ),
             );

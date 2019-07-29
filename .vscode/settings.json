@@ -7,5 +7,6 @@
         "datetime",
         "firestore",
         "sparkline"
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "automatic"
 }

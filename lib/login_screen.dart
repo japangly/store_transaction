@@ -2,24 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:store_transaction/dialog/receipt_dialog.dart';
-import 'package:store_transaction/themes/helpers/fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'dashboard.dart';
+import 'dialog/email_not_found_dialog.dart';
 import 'env.dart';
+import 'functions/authenticate.dart';
+import 'themes/helpers/fonts.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();
 }
 
-TextEditingController phoneTextController = TextEditingController();
+TextEditingController emailTextController = TextEditingController();
+TextEditingController passwordTextController = TextEditingController();
 
 class _LoginState extends State<LoginScreen> {
-  String phoneNumber;
-  bool validatePhoneNumber;
+  SharedPreferences sharedPreferences;
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
+    // final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
 
     return GestureDetector(
       onTap: () {
@@ -61,6 +65,7 @@ class _LoginState extends State<LoginScreen> {
                           ),
                         ),
                         FormBuilderTextField(
+                          controller: emailTextController,
                           keyboardType: TextInputType.emailAddress,
                           attribute: 'email',
                           decoration: InputDecoration(
@@ -81,6 +86,8 @@ class _LoginState extends State<LoginScreen> {
                         Padding(
                           padding: const EdgeInsets.only(top: 10.0),
                           child: FormBuilderTextField(
+                            obscureText: true,
+                            controller: passwordTextController,
                             keyboardType: TextInputType.emailAddress,
                             attribute: 'password',
                             decoration: InputDecoration(
@@ -115,7 +122,42 @@ class _LoginState extends State<LoginScreen> {
                                       Icon(Icons.arrow_forward)
                                     ],
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    if (emailTextController.text != null &&
+                                        passwordTextController.text != null) {
+                                      String userId = await Authenticate()
+                                          .signIn(
+                                              email: emailTextController.text,
+                                              password:
+                                                  passwordTextController.text);
+                                      if (userId != null) {
+                                        emailTextController.clear();
+                                        passwordTextController.clear();
+                                        sharedPreferences =
+                                            await SharedPreferences
+                                                .getInstance();
+                                        sharedPreferences.setString(
+                                            'keyUserId', userId);
+                                        print(
+                                            sharedPreferences.get('keyUserId'));
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (BuildContext context) {
+                                              return Dashboard();
+                                            },
+                                          ),
+                                        );
+                                      } else {
+                                        showDialog(
+                                            context: context,
+                                            builder: (_) {
+                                              return EmailNotFoundDialog();
+                                            });
+                                        // MyDialog();
+                                      }
+                                    }
+                                  },
                                 ),
                               ),
                             ],
