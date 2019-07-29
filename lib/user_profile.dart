@@ -17,6 +17,15 @@ class _UserProfileState extends State<UserProfile> {
         appBar: AppBar(
           backgroundColor: Colors.pinkAccent,
           centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.settings,
+                size: 30.0,
+              ),
+              onPressed: () {},
+            )
+          ],
           title: Text('Profile',
               style: TextStyle(color: Colors.white, fontSize: 30.0)),
         ),
