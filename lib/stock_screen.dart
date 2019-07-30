@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:store_transaction/themes/helpers/theme_colors.dart';
 
 import 'dialog/receipt_dialog.dart';
 import 'helper/counter.dart';
@@ -17,6 +18,7 @@ class _ConfirmDeductFromStockState extends State<ConfirmDeductFromStock> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: pinkColor,
         centerTitle: true,
         title: AutoSizeText(
           'List Stock',
@@ -32,6 +34,7 @@ class _ConfirmDeductFromStockState extends State<ConfirmDeductFromStock> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: pinkColor,
         elevation: 5.0,
         onPressed: () {
           showDialog(
@@ -69,7 +72,7 @@ class _DeductStockCardState extends State<DeductStockCard> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 64.0),
+                padding: const EdgeInsets.fromLTRB(0.0, 128.0, 0.0, 64.0),
                 child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(
@@ -79,18 +82,23 @@ class _DeductStockCardState extends State<DeductStockCard> {
                   elevation: 4.0,
                   child: Padding(
                     padding:
-                        const EdgeInsets.fromLTRB(128.0, 64.0, 128.0, 64.0),
+                        const EdgeInsets.fromLTRB(128.0, 16.0, 128.0, 56.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        AutoSizeText(
-                          'Head & Shoulder',
-                          minFontSize: 32.0,
-                          maxFontSize: 256.0,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 16.0,
+                          ),
+                          child: AutoSizeText(
+                            'Head & Shoulder',
+                            minFontSize: 32.0,
+                            maxFontSize: 256.0,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 56.0),
+                          padding: const EdgeInsets.only(bottom: 32.0),
                           child: AutoSizeText(
                             'Shampoo',
                             minFontSize: 24.0,

@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:recase/recase.dart';
+import 'package:store_transaction/themes/helpers/theme_colors.dart';
 
 import 'dialog/add_service_dialog.dart';
 import 'dialog/receipt_dialog.dart';
@@ -86,6 +87,7 @@ class _ListTotalState extends State<ListTotal> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        backgroundColor: pinkColor,
         title: AutoSizeText(
           'List Calculate Money',
           minFontSize: 30.0,
@@ -112,6 +114,7 @@ class _ListTotalState extends State<ListTotal> {
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: FloatingActionButton(
+              backgroundColor: pinkColor,
               heroTag: 's1',
               elevation: 5.0,
               onPressed: () {
@@ -128,6 +131,7 @@ class _ListTotalState extends State<ListTotal> {
             ),
           ),
           FloatingActionButton(
+            backgroundColor: pinkColor,
             heroTag: 's2',
             elevation: 5.0,
             onPressed: () {

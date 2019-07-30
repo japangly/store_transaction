@@ -21,7 +21,7 @@ class _ServicePriceCardState extends State<ServicePriceCard> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 64.0),
+                padding: const EdgeInsets.fromLTRB(0.0, 128.0, 0.0, 64.0),
                 child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(
@@ -31,18 +31,21 @@ class _ServicePriceCardState extends State<ServicePriceCard> {
                   elevation: 4.0,
                   child: Padding(
                     padding:
-                        const EdgeInsets.fromLTRB(128.0, 64.0, 128.0, 64.0),
+                        const EdgeInsets.fromLTRB(128.0, 16.0, 128.0, 16.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        AutoSizeText(
-                          'Hair Washing',
-                          minFontSize: 36.0,
-                          maxFontSize: 256.0,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 32.0),
+                          child: AutoSizeText(
+                            'Hair Washing',
+                            minFontSize: 36.0,
+                            maxFontSize: 256.0,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 56.0),
+                          padding: const EdgeInsets.only(bottom: 32.0),
                           child: AutoSizeText(
                             'Head & Hair',
                             minFontSize: 24.0,
@@ -98,11 +101,6 @@ class _ServicePriceCardState extends State<ServicePriceCard> {
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(16.0),
-                ),
-              ),
               elevation: 5.0,
               child: ClipRRect(
                 borderRadius: BorderRadius.all(
