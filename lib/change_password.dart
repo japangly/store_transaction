@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'themes/helpers/theme_colors.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -24,6 +25,31 @@ class _LoginState extends State<ChangePasswordScreen> {
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: Scaffold(
+        appBar: GradientAppBar(
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.pinkAccent,
+              size: 30.0,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Text(
+            'Setting',
+            style: TextStyle(fontSize: 30.0),
+          ),
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            stops: [0.6, 0.9],
+            colors: [
+              Colors.pinkAccent,
+              Colors.white,
+            ],
+          ),
+        ),
         body: Container(
           height: double.infinity,
           decoration: BoxDecoration(
