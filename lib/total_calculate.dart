@@ -1,7 +1,9 @@
+import 'package:animated_floatactionbuttons/animated_floatactionbuttons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:recase/recase.dart';
+import 'package:store_transaction/dialog/add_bar_code.dart';
 import 'package:store_transaction/themes/helpers/theme_colors.dart';
 
 import 'dialog/add_service_dialog.dart';
@@ -101,18 +103,50 @@ class _ListTotalState extends State<ListTotal> {
           )
         ],
       ),
-      body: ListView(
-        scrollDirection: Axis.horizontal,
-        children: <Widget>[
-          ServicePriceCard(),
-          SaleItemCard(),
-        ],
+      body: GestureDetector(
+         onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 64.0, right: 64.0, top: 32.0, bottom: 32.0),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8.0),
+                  ),
+                ),
+                elevation: 4.0,
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    labelText: "Barcode",
+                    labelStyle: TextStyle(fontSize: 24.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Flexible(
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: <Widget>[
+                  ServicePriceCard(),
+                  SaleItemCard(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(right: 16.0),
+            padding: const EdgeInsets.only(right: 8.0),
             child: FloatingActionButton(
               backgroundColor: pinkColor,
               heroTag: 's1',
