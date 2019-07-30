@@ -13,6 +13,8 @@ class PrintScreen extends StatefulWidget {
 }
 
 class _PrintScreenState extends State<PrintScreen> {
+  DateTime _startDate;
+  DateTime _endDate;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -63,12 +65,25 @@ class _PrintScreenState extends State<PrintScreen> {
                                 onChanged: (date) {
                               // print('change $date');
                             }, onConfirm: (date) {
+                              setState(() {
+                                _startDate = DateTime.utc(
+                                  date.year,
+                                  date.month,
+                                  date.day,
+                                );
+                                _endDate = DateTime.utc(
+                                  date.year,
+                                  date.month,
+                                  date.day + 1,
+                                );
+                              });
                               // print('confirm $date');
                               showDialog(
                                   context: context,
                                   builder: (_) {
                                     return PrintDialog(
-                                      selectedDay: date,
+                                      setDate: _startDate,
+                                      endDate: _endDate,
                                     );
                                   });
                             },
@@ -83,11 +98,21 @@ class _PrintScreenState extends State<PrintScreen> {
                         ),
                         CustomButton(
                           onPressed: () {
+                            setState(() {
+                              _startDate = DateTime.utc(
+                                DateTime.now().year,
+                                DateTime.now().month,
+                                DateTime.now().day,
+                              );
+                              print('start ' + _startDate.toString());
+                              print('now ' + DateTime.now().toString());
+                            });
                             showDialog(
                                 context: context,
                                 builder: (_) {
                                   return PrintDialog(
-                                    selectedDay: DateTime.now(),
+                                    setDate: _startDate,
+                                    endDate: DateTime.now(),
                                   );
                                 });
                           },

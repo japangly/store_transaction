@@ -124,12 +124,12 @@ class Database {
       {@required String collection,
       @required String field,
       @required Timestamp dateTime,
-      @required Timestamp until}) async {
+      @required Timestamp endDate}) async {
     try {
       QuerySnapshot snapshot = await Firestore.instance
           .collection(collection)
           .where(field, isGreaterThan: dateTime)
-          .where(field, isLessThan: until)
+          .where(field, isLessThan: endDate)
           .getDocuments();
       return snapshot.documents;
     } catch (e) {
