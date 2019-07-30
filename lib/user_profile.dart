@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:store_transaction/change_password.dart';
 import 'package:store_transaction/functions/authenticate.dart';
+import 'package:store_transaction/themes/helpers/theme_colors.dart' as prefix0;
 
 import 'env.dart';
 import 'login_screen.dart';
@@ -32,7 +34,16 @@ class _UserProfileState extends State<UserProfile> {
                 Icons.settings,
                 size: 30.0,
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return ChangePasswordScreen();
+                    },
+                  ),
+                );
+              },
             )
           ],
           title: Text('Profile',
