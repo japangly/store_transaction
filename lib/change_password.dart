@@ -3,14 +3,18 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
-import 'themes/helpers/theme_colors.dart';
+
+import 'dialog/fail_dialog.dart';
+import 'functions/authenticate.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();
 }
 
-TextEditingController phoneTextController = TextEditingController();
+TextEditingController oldPassword = TextEditingController();
+TextEditingController newPassword = TextEditingController();
+TextEditingController retypePassword = TextEditingController();
 
 class _LoginState extends State<ChangePasswordScreen> {
   String phoneNumber;
@@ -78,6 +82,7 @@ class _LoginState extends State<ChangePasswordScreen> {
                     Padding(
                       padding: const EdgeInsets.only(top: 40.0),
                       child: TextFormField(
+                        controller: oldPassword,
                         obscureText: true,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
@@ -91,6 +96,7 @@ class _LoginState extends State<ChangePasswordScreen> {
                     Padding(
                       padding: const EdgeInsets.only(top: 10.0),
                       child: TextFormField(
+                        controller: newPassword,
                         obscureText: true,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
@@ -99,13 +105,25 @@ class _LoginState extends State<ChangePasswordScreen> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
+                        validator: (password) {
+                          var result = password.length < 4
+                              ? "Password should have at least 6 characters"
+                              : null;
+                          return result;
+                        },
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 10.0),
                       child: TextFormField(
+                        controller: retypePassword,
                         obscureText: true,
                         keyboardType: TextInputType.text,
+                        validator: (value) {
+                          if (value != newPassword.text) {
+                            return 'Password is not matching';
+                          }
+                        },
                         decoration: InputDecoration(
                           labelText: 'Retype new password',
                           border: OutlineInputBorder(
@@ -137,7 +155,29 @@ class _LoginState extends State<ChangePasswordScreen> {
                                   Icon(Icons.arrow_forward)
                                 ],
                               ),
-                              onPressed: () {},
+                              onPressed: () async {
+                                if (newPassword.text != null &&
+                                    retypePassword.text != null) {
+                                  if (newPassword.text == retypePassword.text) {
+                                    newPassword.clear();
+                                    retypePassword.clear();
+                                    oldPassword.clear();
+                                    bool isChanged =
+                                        await Authenticate().changePassword(
+                                      oldPassword: oldPassword.text,
+                                      newPassword: newPassword.text,
+                                      context: context,
+                                    );
+                                  }
+                                } else {
+                                  print('object');
+                                  showDialog(
+                                      context: context,
+                                      builder: (_) {
+                                        return FailDialog();
+                                      });
+                                }
+                              },
                             ),
                           ),
                         ],

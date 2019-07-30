@@ -4,8 +4,14 @@ import 'package:flutter/material.dart';
 import 'env.dart';
 
 class ServicePriceCard extends StatefulWidget {
+  final String serviceName;
+  final String makerName;
+  final String price;
   const ServicePriceCard({
     Key key,
+    @required this.serviceName,
+    @required this.makerName,
+    @required this.price,
   }) : super(key: key);
 
   @override
@@ -40,7 +46,7 @@ class _ServicePriceCardState extends State<ServicePriceCard> {
                         Padding(
                           padding: const EdgeInsets.only(top: 32.0),
                           child: AutoSizeText(
-                            'Hair Washing',
+                            widget.serviceName,
                             minFontSize: 32.0,
                             maxFontSize: 256.0,
                             style: TextStyle(fontWeight: FontWeight.bold),
@@ -58,7 +64,7 @@ class _ServicePriceCardState extends State<ServicePriceCard> {
                         Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: AutoSizeText(
-                            'Nou TithPanha',
+                            widget.makerName,
                             minFontSize: 24.0,
                             maxFontSize: 256.0,
                           ),
@@ -76,7 +82,7 @@ class _ServicePriceCardState extends State<ServicePriceCard> {
                                 style: TextStyle(color: Colors.redAccent),
                               ),
                               AutoSizeText(
-                                '25',
+                                widget.price,
                                 minFontSize: 64.0,
                                 maxFontSize: 256.0,
                                 style: TextStyle(

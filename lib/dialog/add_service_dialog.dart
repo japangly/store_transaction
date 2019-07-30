@@ -1,6 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:store_transaction/service_card.dart';
+import 'package:store_transaction/total_calculate.dart';
 
 import '../env.dart';
 import '../themes/helpers/fonts.dart';
@@ -16,16 +19,16 @@ class AddServices extends StatefulWidget {
       @required this.documentEmployees})
       : super(key: key);
 
-  final DocumentSnapshot documentService;
   final DocumentSnapshot documentEmployees;
+  final DocumentSnapshot documentService;
 
   @override
   _AddServicesState createState() => _AddServicesState();
 }
 
 class _AddServicesState extends State<AddServices> {
-  List<String> _listService;
   List<String> _listEmployee;
+  List<String> _listService;
 
   @override
   void initState() {
@@ -129,7 +132,13 @@ class _AddServicesState extends State<AddServices> {
                       ),
                       onPressed: () {
                         if (_selectedName != 'PERSON NAME' &&
-                            _selectedService != 'SERVICE') {}
+                            _selectedService != 'SERVICE') {
+                          addService.add(ServicePriceCard(
+                            makerName: _selectedName,
+                            serviceName: _selectedService,
+                            price: '5',
+                          ));
+                        }
                       },
                     ),
                   ],

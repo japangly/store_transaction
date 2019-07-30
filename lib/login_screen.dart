@@ -179,7 +179,12 @@ class _LoginState extends State<LoginScreen> {
                                   'Forgot password?',
                                   style: font20Grey,
                                 ),
-                                onPressed: () {},
+                                onPressed: () async {
+                                  if (emailTextController.text != null) {
+                                    await Authenticate().resetPassword(
+                                        email: emailTextController.text);
+                                  } else {}
+                                },
                               ),
                             ],
                           ),
