@@ -11,9 +11,11 @@ import '../themes/helpers/buttons.dart';
 import '../themes/helpers/theme_colors.dart';
 
 class PrintDialog extends StatefulWidget {
-  const PrintDialog({Key key, @required this.selectedDay}) : super(key: key);
+  const PrintDialog({Key key, @required this.setDate, @required this.endDate})
+      : super(key: key);
 
-  final DateTime selectedDay;
+  final DateTime setDate;
+  final DateTime endDate;
 
   @override
   _PrintDialogState createState() => _PrintDialogState();
@@ -34,22 +36,20 @@ class _PrintDialogState extends State<PrintDialog> {
 
   Future<String> getReportData() async {
     String result = '';
-    var startDateTime = DateFormat("yMMMd").format(widget.selectedDay);
 
-    int epoch = widget.selectedDay.millisecond;
-    epoch += 86400;
-    print('selected date '+ widget.selectedDay.millisecondsSinceEpoch.toString());
-    print('add '+ epoch.toString());
-    var i = DateTime.fromMillisecondsSinceEpoch(epoch);
-    print('until date' + DateFormat("yMMMd").format(i));
     List<DocumentSnapshot> documents = await Database().getHistoryProduction(
         collection: 'product_history',
         field: 'date',
-        dateTime: Timestamp.fromDate(widget.selectedDay),
-        until: Timestamp.fromDate(DateTime.fromMillisecondsSinceEpoch(epoch)));
+        dateTime: Timestamp.fromDate(widget.setDate),
+        endDate: Timestamp.fromDate(widget.endDate));
+
     if (documents != null) {
       for (int i = 0; i < documents.length; i++) {
-        print(documents[i].data['date']);
+        var date = DateFormat('d MMM y HH:mm a')
+            .format(documents[i].data['date of birth'].toDate())
+            .toString();
+        print('print date' + documents[i].data['date'].toString());
+        print('date format' + date);
         result +=
             '<tr> <td>${i++}</td> <td>${documents[i].data['product name']}</td> <td>${documents[i].data['quantity']}</td> <td>Sale</td> <td>Sale to customer</td> <td>${documents[i].data['employee id']}</td> <td>${documents[i].data['employee last name']}+'
             '+ ${documents[i].data['employee first name']} </td> <td>${documents[i].data['date']}</td> </tr>';
@@ -57,7 +57,7 @@ class _PrintDialogState extends State<PrintDialog> {
     } else {
       result += '';
     }
-
+    print('result ' + result);
     return result;
   }
 
@@ -84,7 +84,7 @@ class _PrintDialogState extends State<PrintDialog> {
                   Padding(
                     padding: const EdgeInsets.only(top: 20.0),
                     child: Text(
-                      'You are printing a report of ${widget.selectedDay}',
+                      'You are printing a report of ${widget.setDate}',
                       style: TextStyle(fontSize: 20),
                       textAlign: TextAlign.center,
                     ),

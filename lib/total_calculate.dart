@@ -1,10 +1,7 @@
-import 'package:animated_floatactionbuttons/animated_floatactionbuttons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:recase/recase.dart';
-import 'package:store_transaction/dialog/add_bar_code.dart';
-import 'package:store_transaction/themes/helpers/theme_colors.dart';
 
 import 'dialog/add_service_dialog.dart';
 import 'dialog/receipt_dialog.dart';
@@ -12,6 +9,7 @@ import 'functions/firebase_firestore.dart';
 import 'helper/search_library.dart';
 import 'sale_card.dart';
 import 'service_card.dart';
+import 'themes/helpers/theme_colors.dart';
 
 class ListTotal extends StatefulWidget {
   const ListTotal({Key key, @required this.documents}) : super(key: key);
@@ -84,6 +82,25 @@ class _ListTotalState extends State<ListTotal> {
         .then((dynamic value) {
       setState(() => _name = value as String);
     });
+  }
+
+  List<Widget> children() {
+    return <Widget>[
+      ServicePriceCard(
+        makerName: 'null',
+        serviceName: 'Makeup',
+        price: '5',
+      ),
+      ServicePriceCard(
+        makerName: 'null',
+        serviceName: 'Hair washing',
+        price: '5',
+      ),
+      SaleItemCard(
+        price: '10',
+        productName: 'null',
+      ),
+    ];
   }
 
   @override
@@ -190,24 +207,5 @@ class _ListTotalState extends State<ListTotal> {
         ],
       ),
     );
-  }
-
-  List<Widget> children() {
-    return <Widget>[
-      ServicePriceCard(
-        makerName: 'null',
-        serviceName: 'Makeup',
-        price: '5',
-      ),
-      ServicePriceCard(
-        makerName: 'null',
-        serviceName: 'Hair washing',
-        price: '5',
-      ),
-      SaleItemCard(
-        price: '10',
-        productName: 'null',
-      ),
-    ];
   }
 }
