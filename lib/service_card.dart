@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
+import 'env.dart';
+
 class ServicePriceCard extends StatefulWidget {
   const ServicePriceCard({
     Key key,
@@ -21,7 +23,7 @@ class _ServicePriceCardState extends State<ServicePriceCard> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.fromLTRB(0.0, 128.0, 0.0, 64.0),
+                padding: const EdgeInsets.fromLTRB(0.0, 64.0, 0.0, 64.0),
                 child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(
@@ -31,7 +33,7 @@ class _ServicePriceCardState extends State<ServicePriceCard> {
                   elevation: 4.0,
                   child: Padding(
                     padding:
-                        const EdgeInsets.fromLTRB(128.0, 16.0, 128.0, 16.0),
+                        const EdgeInsets.fromLTRB(128.0, 32.0, 128.0, 32.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
@@ -39,13 +41,13 @@ class _ServicePriceCardState extends State<ServicePriceCard> {
                           padding: const EdgeInsets.only(top: 32.0),
                           child: AutoSizeText(
                             'Hair Washing',
-                            minFontSize: 36.0,
+                            minFontSize: 32.0,
                             maxFontSize: 256.0,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 32.0),
+                          padding: const EdgeInsets.only(bottom: 16.0),
                           child: AutoSizeText(
                             'Head & Hair',
                             minFontSize: 24.0,
@@ -54,22 +56,15 @@ class _ServicePriceCardState extends State<ServicePriceCard> {
                           ),
                         ),
                         Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 42.0),
+                          padding: const EdgeInsets.all(16.0),
                           child: AutoSizeText(
                             'Nou TithPanha',
                             minFontSize: 24.0,
                             maxFontSize: 256.0,
                           ),
                         ),
-                        AutoSizeText(
-                          'Price',
-                          minFontSize: 24.0,
-                          maxFontSize: 256.0,
-                          style: TextStyle(color: Colors.grey),
-                        ),
                         Padding(
-                          padding: const EdgeInsets.all(24.0),
+                          padding: const EdgeInsets.all(12.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,21 +93,23 @@ class _ServicePriceCardState extends State<ServicePriceCard> {
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Card(
-              elevation: 5.0,
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(16.0),
-                ),
-                child: Image.network(
-                  'https://sleepmatters.ie/wp-content/uploads/2018/05/Child-Bath-Every-Night.jpg',
-                  height: 230.0,
-                  width: 230.0,
-                  fit: BoxFit.fitHeight,
-                  scale: 30.0,
-                ),
+          Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(16.0),
+              ),
+            ),
+            elevation: 5.0,
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(
+                Radius.circular(16.0),
+              ),
+              child: Image.network(
+                'https://sleepmatters.ie/wp-content/uploads/2018/05/Child-Bath-Every-Night.jpg',
+                height: Environment().getHeight(height: 12.0),
+                width: Environment().getWidth(width: 10.0),
+                fit: BoxFit.fitHeight,
+                scale: 30.0,
               ),
             ),
           ),

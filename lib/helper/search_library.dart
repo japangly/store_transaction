@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:store_transaction/themes/helpers/theme_colors.dart';
 
 typedef String FormFieldFormatter<T>(T v);
 typedef bool MaterialSearchFilter<T>(DocumentSnapshot v, String c);
@@ -185,15 +186,17 @@ class _MaterialSearchState<T> extends State<MaterialSearch> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: pinkColor,
         iconTheme: iconTheme,
         title: TextField(
           cursorColor: Colors.white,
           controller: _controller,
           autofocus: true,
           decoration: InputDecoration(
-            hintText: widget.placeholder,
-            hintStyle: TextStyle(color: Colors.white54),
-          ),
+              hintText: widget.placeholder,
+              hintStyle: TextStyle(color: Colors.white54),
+              focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: pinkColor))),
           style: TextStyle(color: Colors.white),
           onSubmitted: (String value) {
             if (widget.onSubmit != null) {
