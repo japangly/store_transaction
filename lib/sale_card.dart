@@ -5,11 +5,13 @@ import 'helper/counter.dart';
 
 int _defaultValue = 1;
 
-int _multiNum = 250;
-
 class SaleItemCard extends StatefulWidget {
+  final String productName;
+  final String price;
   const SaleItemCard({
     Key key,
+    @required this.productName,
+    @required this.price,
   }) : super(key: key);
 
   @override
@@ -42,7 +44,7 @@ class _SaleItemCardState extends State<SaleItemCard> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         AutoSizeText(
-                          'Beat',
+                          widget.productName,
                           minFontSize: 36.0,
                           maxFontSize: 256.0,
                           style: TextStyle(fontWeight: FontWeight.bold),
@@ -91,7 +93,7 @@ class _SaleItemCardState extends State<SaleItemCard> {
                                 style: TextStyle(color: Colors.redAccent),
                               ),
                               AutoSizeText(
-                                '$_multiNum',
+                                widget.price,
                                 minFontSize: 64.0,
                                 maxFontSize: 256.0,
                                 style: TextStyle(

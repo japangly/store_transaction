@@ -12,13 +12,15 @@ import 'sale_card.dart';
 import 'service_card.dart';
 
 class ListTotal extends StatefulWidget {
-  const ListTotal({Key key, this.documents}) : super(key: key);
+  const ListTotal({Key key, @required this.documents}) : super(key: key);
 
   final List<DocumentSnapshot> documents;
 
   @override
   _ListTotalState createState() => _ListTotalState();
 }
+
+List<Widget> addService;
 
 class _ListTotalState extends State<ListTotal> {
   final _formKey = new GlobalKey<FormState>();
@@ -103,10 +105,7 @@ class _ListTotalState extends State<ListTotal> {
       ),
       body: ListView(
         scrollDirection: Axis.horizontal,
-        children: <Widget>[
-          ServicePriceCard(),
-          SaleItemCard(),
-        ],
+        children: children(),
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -157,5 +156,24 @@ class _ListTotalState extends State<ListTotal> {
         ],
       ),
     );
+  }
+
+  List<Widget> children() {
+    return <Widget>[
+      ServicePriceCard(
+        makerName: 'null',
+        serviceName: 'Makeup',
+        price: '5',
+      ),
+      ServicePriceCard(
+        makerName: 'null',
+        serviceName: 'Hair washing',
+        price: '5',
+      ),
+      SaleItemCard(
+        price: '10',
+        productName: 'null',
+      ),
+    ];
   }
 }
