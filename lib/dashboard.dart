@@ -61,72 +61,10 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  Widget normalQueue(Widget child, {Function() onTap}) {
+  Widget _buildTile(Widget child, {Function() onTap}) {
     return Material(
         elevation: 14.0,
-        borderRadius: BorderRadius.circular(8.0),
-        shadowColor: Color(0x802196F3),
-        child: InkWell(
-            // Do onTap() if it isn't null, otherwise do print()
-            onTap: onTap != null
-                ? () => onTap()
-                : () {
-                    print('Not set yet');
-                  },
-            child: child));
-  }
-
-  Widget productSold(Widget child, {Function() onTap}) {
-    return Material(
-        color: pinkColor,
-        elevation: 14.0,
-        borderRadius: BorderRadius.circular(8.0),
-        shadowColor: Color(0x802196F3),
-        child: InkWell(
-            // Do onTap() if it isn't null, otherwise do print()
-            onTap: onTap != null
-                ? () => onTap()
-                : () {
-                    print('Not set yet');
-                  },
-            child: child));
-  }
-
-  Widget vipQueue(Widget child, {Function() onTap}) {
-    return Material(
-        elevation: 14.0,
-        borderRadius: BorderRadius.circular(8.0),
-        shadowColor: Color(0x802196F3),
-        child: InkWell(
-            // Do onTap() if it isn't null, otherwise do print()
-            onTap: onTap != null
-                ? () => onTap()
-                : () {
-                    print('Not set yet');
-                  },
-            child: child));
-  }
-
-  Widget history(Widget child, {Function() onTap}) {
-    return Material(
-        elevation: 14.0,
-        borderRadius: BorderRadius.circular(8.0),
-        shadowColor: Color(0x802196F3),
-        child: InkWell(
-            // Do onTap() if it isn't null, otherwise do print()
-            onTap: onTap != null
-                ? () => onTap()
-                : () {
-                    print('Not set yet');
-                  },
-            child: child));
-  }
-
-  Widget todayEarnings(Widget child, {Function() onTap}) {
-    return Material(
-        color: Colors.lightBlueAccent,
-        elevation: 14.0,
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(12.0),
         shadowColor: Color(0x802196F3),
         child: InkWell(
             // Do onTap() if it isn't null, otherwise do print()
@@ -175,7 +113,7 @@ class _DashboardState extends State<Dashboard> {
         mainAxisSpacing: 12.0,
         padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         children: <Widget>[
-          todayEarnings(
+          _buildTile(
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Row(
@@ -189,7 +127,7 @@ class _DashboardState extends State<Dashboard> {
                         Text('Today Earnings', style: font25Black),
                         Text('\$2,000',
                             style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.blue,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 50.0))
                       ],
@@ -197,7 +135,7 @@ class _DashboardState extends State<Dashboard> {
                   ]),
             ),
           ),
-          history(
+          _buildTile(
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
@@ -296,21 +234,31 @@ class _DashboardState extends State<Dashboard> {
               ),
             ),
           ),
-          productSold(
+          _buildTile(
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Text('Products Sold', style: font25Black),
                         Text('2000',
                             style: TextStyle(
-                                color: Colors.white,
+                                color: confirmColor,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 50.0)),
+                        Text('items', style: font25Black),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Products In Use', style: font25Black),
+                        Text('50',
+                            style: TextStyle(
+                                color: pinkColor,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 50.0)),
                         Text('items', style: font25Black),
@@ -319,23 +267,18 @@ class _DashboardState extends State<Dashboard> {
                   ]),
             ),
           ),
-          vipQueue(
+          _buildTile(
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('សម្រាប់ភ្ញៀវពិសេស',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 20.0)),
                     Text('លេខរង់ចាំរបស់អ្នកគឺ',
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w700,
                             fontSize: 20.0)),
-                    Text('1',
+                    Text('01',
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w700,
@@ -348,7 +291,7 @@ class _DashboardState extends State<Dashboard> {
                   ]),
             ),
           ),
-          normalQueue(
+          _buildTile(
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
@@ -359,7 +302,7 @@ class _DashboardState extends State<Dashboard> {
                             color: Colors.black,
                             fontWeight: FontWeight.w700,
                             fontSize: 20.0)),
-                    Text('1',
+                    Text('VIP 01',
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w700,
