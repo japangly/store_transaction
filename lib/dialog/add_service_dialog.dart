@@ -31,7 +31,7 @@ class _AddServicesState extends State<AddServices> {
       ),
       content: SingleChildScrollView(
         child: Container(
-          width: Environment().getWidth(width: 10.0),
+          width: Environment().getWidth(width: 16.0),
           child: Column(
             children: <Widget>[
               Column(
@@ -100,9 +100,14 @@ class _AddServicesState extends State<AddServices> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     FlatButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
+                        ),
+                      ),
                       padding:
                           const EdgeInsets.fromLTRB(32.0, 16.0, 32.0, 16.0),
-                      color: blueColor,
+                      color: pinkColor,
                       child: AutoSizeText(
                         'ADD',
                         minFontSize: 24.0,

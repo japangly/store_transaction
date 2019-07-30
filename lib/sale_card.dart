@@ -27,7 +27,7 @@ class _SaleItemCardState extends State<SaleItemCard> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 64.0),
+                padding: const EdgeInsets.fromLTRB(0.0, 128.0, 0.0, 64.0),
                 child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(
@@ -37,7 +37,7 @@ class _SaleItemCardState extends State<SaleItemCard> {
                   elevation: 4.0,
                   child: Padding(
                     padding:
-                        const EdgeInsets.fromLTRB(128.0, 64.0, 128.0, 64.0),
+                        const EdgeInsets.fromLTRB(128.0, 16.0, 128.0, 16.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
@@ -48,7 +48,7 @@ class _SaleItemCardState extends State<SaleItemCard> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 56.0),
+                          padding: const EdgeInsets.only(bottom: 32.0),
                           child: AutoSizeText(
                             'Headset',
                             minFontSize: 24.0,
