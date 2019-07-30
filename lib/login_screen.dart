@@ -20,6 +20,15 @@ TextEditingController passwordTextController = TextEditingController();
 
 class _LoginState extends State<LoginScreen> {
   SharedPreferences sharedPreferences;
+  @override
+  void initState() {
+    super.initState();
+    _instanceSharePrefrences();
+  }
+
+  Future _instanceSharePrefrences() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,9 +142,6 @@ class _LoginState extends State<LoginScreen> {
                                       if (userId != null) {
                                         emailTextController.clear();
                                         passwordTextController.clear();
-                                        sharedPreferences =
-                                            await SharedPreferences
-                                                .getInstance();
                                         sharedPreferences.setString(
                                             'keyUserId', userId);
                                         print(

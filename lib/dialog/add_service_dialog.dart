@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../env.dart';
@@ -9,15 +10,32 @@ String _selectedService = 'SERVICE';
 String _selectedName = 'PERSON NAME';
 
 class AddServices extends StatefulWidget {
-  AddServices({Key key, this.documentId}) : super(key: key);
+  AddServices(
+      {Key key,
+      @required this.documentService,
+      @required this.documentEmployees})
+      : super(key: key);
 
-  final String documentId;
+  final DocumentSnapshot documentService;
+  final DocumentSnapshot documentEmployees;
 
   @override
   _AddServicesState createState() => _AddServicesState();
 }
 
 class _AddServicesState extends State<AddServices> {
+  List<String> _listService;
+  List<String> _listEmployee;
+
+  @override
+  void initState() {
+    super.initState();
+    _listService = List.from(widget.documentService.data['category']);
+    _listEmployee = List.from(widget.documentEmployees.data['category']);
+    _listService.sort();
+    _listEmployee.sort();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -51,10 +69,7 @@ class _AddServicesState extends State<AddServices> {
                     _selectedService,
                     minFontSize: 24.0,
                   ),
-                  items: <String>[
-                    'Hair Conditioner',
-                    'Cut Nail',
-                  ].map((String value) {
+                  items: _listService.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: AutoSizeText(
@@ -77,8 +92,7 @@ class _AddServicesState extends State<AddServices> {
                     _selectedName,
                     minFontSize: 24.0,
                   ),
-                  items: <String>['Nou TithPanha', 'Num Pang Sach']
-                      .map((String value) {
+                  items: _listEmployee.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: AutoSizeText(
@@ -113,7 +127,10 @@ class _AddServicesState extends State<AddServices> {
                         minFontSize: 24.0,
                         style: TextStyle(color: Colors.white),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        if (_selectedName != 'PERSON NAME' &&
+                            _selectedService != 'SERVICE') {}
+                      },
                     ),
                   ],
                 ),
