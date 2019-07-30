@@ -52,7 +52,7 @@ class _AddServicesState extends State<AddServices> {
       ),
       content: SingleChildScrollView(
         child: Container(
-          width: Environment().getWidth(width: 16.0),
+          width: Environment().getWidth(width: 12.0),
           child: Column(
             children: <Widget>[
               Column(

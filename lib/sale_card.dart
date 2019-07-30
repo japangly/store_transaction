@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
+import 'env.dart';
 import 'helper/counter.dart';
 
 int _defaultValue = 1;
@@ -29,7 +30,7 @@ class _SaleItemCardState extends State<SaleItemCard> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.fromLTRB(0.0, 128.0, 0.0, 64.0),
+                padding: const EdgeInsets.fromLTRB(0.0, 64.0, 0.0, 64.0),
                 child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(
@@ -38,19 +39,18 @@ class _SaleItemCardState extends State<SaleItemCard> {
                   ),
                   elevation: 4.0,
                   child: Padding(
-                    padding:
-                        const EdgeInsets.fromLTRB(128.0, 16.0, 128.0, 16.0),
+                    padding: const EdgeInsets.fromLTRB(128.0, 0.0, 128.0, 32.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         AutoSizeText(
                           widget.productName,
-                          minFontSize: 36.0,
+                          minFontSize: 32.0,
                           maxFontSize: 256.0,
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 32.0),
+                          padding: const EdgeInsets.only(bottom: 8.0),
                           child: AutoSizeText(
                             'Headset',
                             minFontSize: 24.0,
@@ -59,8 +59,7 @@ class _SaleItemCardState extends State<SaleItemCard> {
                           ),
                         ),
                         Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 32.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: CounterPlugin(
                             initialValue: _defaultValue,
                             minValue: 1,
@@ -74,21 +73,15 @@ class _SaleItemCardState extends State<SaleItemCard> {
                             },
                           ),
                         ),
-                        AutoSizeText(
-                          'Price',
-                          minFontSize: 24.0,
-                          maxFontSize: 256.0,
-                          style: TextStyle(color: Colors.grey),
-                        ),
                         Padding(
-                          padding: const EdgeInsets.all(24.0),
+                          padding: const EdgeInsets.all(16.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               AutoSizeText(
                                 '\$',
-                                minFontSize: 32.0,
+                                minFontSize: 24.0,
                                 maxFontSize: 256.0,
                                 style: TextStyle(color: Colors.redAccent),
                               ),
@@ -110,21 +103,18 @@ class _SaleItemCardState extends State<SaleItemCard> {
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(16.0),
-                ),
+          Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(16.0),
               ),
-              elevation: 5.0,
-              child: Image.network(
-                'https://www.beatsbydre.com/content/dam/beats/web/pcp/headphones/solo3_wireless/_0001_MNEN2-RGB-bttm.png.small.2x.png',
-                height: 230.0,
-                width: 230.0,
-                fit: BoxFit.fitHeight,
-              ),
+            ),
+            elevation: 5.0,
+            child: Image.network(
+              'https://www.beatsbydre.com/content/dam/beats/web/pcp/headphones/solo3_wireless/_0001_MNEN2-RGB-bttm.png.small.2x.png',
+              height: Environment().getHeight(height: 12.0),
+              width: Environment().getWidth(width: 10.0),
+              fit: BoxFit.fitHeight,
             ),
           ),
           Padding(
