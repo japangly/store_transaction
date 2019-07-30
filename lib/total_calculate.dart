@@ -117,11 +117,19 @@ class _ListTotalState extends State<ListTotal> {
               backgroundColor: pinkColor,
               heroTag: 's1',
               elevation: 5.0,
-              onPressed: () {
+              onPressed: () async {
+                DocumentSnapshot servicesDocument = await Database()
+                    .getCollectionByDocumentId(
+                        collection: 'category', documentId: 'services');
+                DocumentSnapshot employeesDocument = await Database()
+                    .getCollectionByDocumentId(
+                        collection: 'category', documentId: 'employees');
                 showDialog(
                     context: context,
                     builder: (_) {
-                      return AddServices();
+                      return AddServices(
+                          documentService: servicesDocument,
+                          documentEmployees: employeesDocument);
                     });
               },
               child: Icon(
