@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_icons/material_community_icons.dart';
-import 'package:flutter_icons/simple_line_icons.dart';
-import 'package:store_transaction/themes/helpers/buttons.dart';
-import 'package:store_transaction/themes/helpers/fonts.dart';
-import 'package:store_transaction/themes/helpers/theme_colors.dart';
 
 import 'env.dart';
+import 'themes/helpers/fonts.dart';
+import 'themes/helpers/theme_colors.dart';
 
 void main() => runApp(MaterialApp(home: Home()));
 

@@ -1,24 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'themes/helpers/theme_colors.dart';
+import 'package:recase/recase.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   @override
-  _LoginState createState() => _LoginState();
+  _ResetPasswordScreenState createState() => _ResetPasswordScreenState();
 }
 
-TextEditingController phoneTextController = TextEditingController();
-
-class _LoginState extends State<ResetPasswordScreen> {
-  String phoneNumber;
-  bool validatePhoneNumber;
-
+class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -51,23 +43,14 @@ class _LoginState extends State<ResetPasswordScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 50.0),
-                      child: FormBuilderTextField(
+                      child: TextFormField(
                         keyboardType: TextInputType.emailAddress,
-                        attribute: 'email',
                         decoration: InputDecoration(
-                          labelText: 'Email address',
+                          labelText: ReCase('email address').titleCase,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        validators: [
-                          FormBuilderValidators.required(
-                              errorText: 'Email address cannot be empty.'),
-                          FormBuilderValidators.email(
-                              errorText:
-                                  'Email address need to be a valid email address.'),
-                          FormBuilderValidators.maxLength(30),
-                        ],
                       ),
                     ),
                     Padding(

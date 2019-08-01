@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:recase/recase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dashboard.dart';
@@ -20,6 +20,7 @@ TextEditingController passwordTextController = TextEditingController();
 
 class _LoginState extends State<LoginScreen> {
   SharedPreferences sharedPreferences;
+
   @override
   void initState() {
     super.initState();
@@ -73,34 +74,24 @@ class _LoginState extends State<LoginScreen> {
                                 fontSize: 20.0, color: Colors.black38),
                           ),
                         ),
-                        FormBuilderTextField(
+                        TextFormField(
                           controller: emailTextController,
                           keyboardType: TextInputType.emailAddress,
-                          attribute: 'email',
                           decoration: InputDecoration(
-                            labelText: 'Email address',
+                            labelText: ReCase('email address').titleCase,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
-                          validators: [
-                            FormBuilderValidators.required(
-                                errorText: 'Email address cannot be empty.'),
-                            FormBuilderValidators.email(
-                                errorText:
-                                    'Email address need to be a valid email address.'),
-                            FormBuilderValidators.maxLength(30),
-                          ],
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 10.0),
-                          child: FormBuilderTextField(
+                          child: TextFormField(
                             obscureText: true,
                             controller: passwordTextController,
                             keyboardType: TextInputType.emailAddress,
-                            attribute: 'password',
                             decoration: InputDecoration(
-                              labelText: 'Password',
+                              labelText: ReCase('password').titleCase,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),

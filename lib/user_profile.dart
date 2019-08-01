@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:store_transaction/change_password.dart';
-import 'package:store_transaction/functions/authenticate.dart';
-import 'package:store_transaction/themes/helpers/theme_colors.dart' as prefix0;
 
+import 'change_password.dart';
 import 'env.dart';
+import 'functions/authenticate.dart';
 import 'login_screen.dart';
 import 'themes/helpers/fonts.dart';
 import 'themes/helpers/theme_colors.dart';
 
 class UserProfile extends StatefulWidget {
-  final DocumentSnapshot documentSnapshot;
-
   const UserProfile({Key key, @required this.documentSnapshot})
       : super(key: key);
+
+  final DocumentSnapshot documentSnapshot;
+
   @override
   _UserProfileState createState() => _UserProfileState();
 }

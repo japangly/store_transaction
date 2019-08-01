@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 
 import 'dialog/fail_dialog.dart';
@@ -9,21 +8,16 @@ import 'functions/authenticate.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   @override
-  _LoginState createState() => _LoginState();
+  _ChangePasswordScreenState createState() => _ChangePasswordScreenState();
 }
 
-TextEditingController oldPassword = TextEditingController();
-TextEditingController newPassword = TextEditingController();
-TextEditingController retypePassword = TextEditingController();
-
-class _LoginState extends State<ChangePasswordScreen> {
-  String phoneNumber;
-  bool validatePhoneNumber;
+class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
+  TextEditingController oldPassword = TextEditingController();
+  TextEditingController newPassword = TextEditingController();
+  TextEditingController retypePassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -123,6 +117,7 @@ class _LoginState extends State<ChangePasswordScreen> {
                           if (value != newPassword.text) {
                             return 'Password is not matching';
                           }
+                          return null;
                         },
                         decoration: InputDecoration(
                           labelText: 'Retype new password',
@@ -162,8 +157,7 @@ class _LoginState extends State<ChangePasswordScreen> {
                                     newPassword.clear();
                                     retypePassword.clear();
                                     oldPassword.clear();
-                                    bool isChanged =
-                                        await Authenticate().changePassword(
+                                    await Authenticate().changePassword(
                                       oldPassword: oldPassword.text,
                                       newPassword: newPassword.text,
                                       context: context,

@@ -1,24 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:store_transaction/themes/helpers/theme_colors.dart' as prefix0;
 
 class SuccessResetScreen extends StatefulWidget {
   @override
-  _LoginState createState() => _LoginState();
+  _SuccessResetScreenState createState() => _SuccessResetScreenState();
 }
 
-TextEditingController phoneTextController = TextEditingController();
-
-class _LoginState extends State<SuccessResetScreen> {
-  String phoneNumber;
-  bool validatePhoneNumber;
-
+class _SuccessResetScreenState extends State<SuccessResetScreen> {
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
