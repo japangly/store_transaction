@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:recase/recase.dart';
 
 import '../env.dart';
 import '../themes/helpers/buttons.dart';
@@ -30,18 +30,17 @@ class EditDialog extends StatelessWidget {
               Column(
                 children: <Widget>[
                   Text(
-                    "Edit Product",
+                    ReCase('edit product').titleCase,
                     style: font20Black,
                   )
                 ],
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 25.0),
-                child: FormBuilderTextField(
-                  attribute: "quantity",
+                child: TextFormField(
                   style: font15Grey,
                   decoration: InputDecoration(
-                    labelText: "Quantity",
+                    labelText: ReCase('quantity').titleCase,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -54,9 +53,9 @@ class EditDialog extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     CustomButton(
-                      onPressed: () {},
-                      textButton: 'Save',
+                      textButton: ReCase('save').titleCase,
                       colorButton: confirmColor,
+                      onPressed: () {},
                     ),
                   ],
                 ),

@@ -3,9 +3,12 @@
         "tab.unfocusedActiveBorder": "#fff0"
     },
     "cSpell.words": [
+        "Realistica",
         "Schyler",
         "datetime",
         "firestore",
+        "floatactionbuttons",
+        "recase",
         "sparkline"
     ],
     "java.configuration.updateBuildConfiguration": "automatic"

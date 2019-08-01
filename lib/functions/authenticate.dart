@@ -49,11 +49,11 @@ class Authenticate {
             Authenticate().signOut();
           });
         });
-        return true;
       });
-      print('Success changed password');
+      print('success changed password');
+      return true;
     } catch (error) {
-      print('error $error');
+      print(error);
       return false;
     }
   }

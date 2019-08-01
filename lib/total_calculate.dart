@@ -23,19 +23,7 @@ class ListTotal extends StatefulWidget {
 List<Widget> addService;
 
 class _ListTotalState extends State<ListTotal> {
-  final _formKey = new GlobalKey<FormState>();
   String _name = 'No one';
-  final _names = [
-    'Igor Minar',
-    'Brad Green',
-    'Dave Geddes',
-    'Naomi Black',
-    'Greg Weber',
-    'Dean Sofer',
-    'Wes Alvaro',
-    'John Scott',
-    'Daniel Nadasi',
-  ];
 
   _buildMaterialSearchPage(BuildContext context) {
     return new MaterialPageRoute<String>(
@@ -123,7 +111,7 @@ class _ListTotalState extends State<ListTotal> {
         ],
       ),
       body: GestureDetector(
-         onTap: () {
+        onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Column(
