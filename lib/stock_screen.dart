@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:store_transaction/env.dart';
+import 'package:store_transaction/functions/firebase_firestore.dart';
 import 'package:store_transaction/themes/helpers/theme_colors.dart';
 
 import 'dialog/receipt_dialog.dart';
@@ -54,15 +56,26 @@ class _ConfirmDeductFromStockState extends State<ConfirmDeductFromStock> {
               ),
             ),
             Flexible(
-              child: ListView(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                children: <Widget>[
-                  DeductStockCard(),
-                  DeductStockCard(),
-                  DeductStockCard(),
-                ].reversed.toList(),
-              ),
+              child: StreamBuilder<QuerySnapshot>(
+                  stream: Database().getStreamCollection(
+                    collection: 'products',
+                    orderBy: 'name',
+                    isDescending: false,
+                  ),
+                  builder: (BuildContext context, snapshot) {
+                    List<Widget> listWidget = [];
+                    for (int i = 0; i < snapshot.data.documents.length; i++) {
+                      listWidget.add(DeductStockCard(
+                        productDocument: snapshot.data.documents[i],
+                      ));
+                    }
+
+                    return ListView(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      children: listWidget,
+                    );
+                  }),
             ),
           ],
         ),
@@ -87,8 +100,10 @@ class _ConfirmDeductFromStockState extends State<ConfirmDeductFromStock> {
 }
 
 class DeductStockCard extends StatefulWidget {
+  final DocumentSnapshot productDocument;
   const DeductStockCard({
     Key key,
+    @required this.productDocument,
   }) : super(key: key);
 
   @override
@@ -123,7 +138,7 @@ class _DeductStockCardState extends State<DeductStockCard> {
                           top: 16.0,
                         ),
                         child: AutoSizeText(
-                          'Head & Shoulder',
+                          widget.productDocument.data['name'],
                           minFontSize: 24.0,
                           maxFontSize: 256.0,
                           style: TextStyle(fontWeight: FontWeight.bold),
@@ -132,7 +147,7 @@ class _DeductStockCardState extends State<DeductStockCard> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 12.0),
                         child: AutoSizeText(
-                          'Shampoo',
+                          widget.productDocument.data['category'],
                           minFontSize: 24.0,
                           maxFontSize: 256.0,
                           style: TextStyle(color: Colors.grey),
@@ -143,7 +158,7 @@ class _DeductStockCardState extends State<DeductStockCard> {
                         child: CounterPlugin(
                           initialValue: _defaultValue,
                           minValue: 1,
-                          maxValue: 11,
+                          maxValue: widget.productDocument.data['in stock'],
                           buttonSize: 32.0,
                           decimalPlaces: 3,
                           onChanged: (value) {
@@ -204,7 +219,7 @@ class _DeductStockCardState extends State<DeductStockCard> {
                 Radius.circular(16.0),
               ),
               child: Image.network(
-                'https://images-na.ssl-images-amazon.com/images/I/71QTkaXtxjL._SY355_.jpg',
+                widget.productDocument.data['image'],
                 height: Environment().getHeight(height: 12.0),
                 width: Environment().getWidth(width: 10.0),
                 fit: BoxFit.fitHeight,

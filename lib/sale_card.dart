@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'env.dart';
@@ -7,12 +8,10 @@ import 'helper/counter.dart';
 int _defaultValue = 1;
 
 class SaleItemCard extends StatefulWidget {
-  final String productName;
-  final String price;
+  final DocumentSnapshot item;
   const SaleItemCard({
     Key key,
-    @required this.productName,
-    @required this.price,
+    @required this.item,
   }) : super(key: key);
 
   @override
@@ -20,6 +19,15 @@ class SaleItemCard extends StatefulWidget {
 }
 
 class _SaleItemCardState extends State<SaleItemCard> {
+  int priceItem = 0;
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      priceItem = widget.item.data['sale price'];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -44,7 +52,7 @@ class _SaleItemCardState extends State<SaleItemCard> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         AutoSizeText(
-                          widget.productName,
+                          widget.item.data['name'],
                           minFontSize: 32.0,
                           maxFontSize: 256.0,
                           style: TextStyle(fontWeight: FontWeight.bold),
@@ -52,7 +60,7 @@ class _SaleItemCardState extends State<SaleItemCard> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 8.0),
                           child: AutoSizeText(
-                            'Headset',
+                            widget.item.data['category'],
                             minFontSize: 24.0,
                             maxFontSize: 256.0,
                             style: TextStyle(color: Colors.grey),
@@ -63,12 +71,15 @@ class _SaleItemCardState extends State<SaleItemCard> {
                           child: CounterPlugin(
                             initialValue: _defaultValue,
                             minValue: 1,
-                            maxValue: 11,
+                            maxValue: widget.item.data['in stock'],
+                            step: 1,
                             buttonSize: 32.0,
                             decimalPlaces: 3,
                             onChanged: (value) {
                               setState(() {
                                 _defaultValue = value;
+                                priceItem =
+                                    value * widget.item.data['sale price'];
                               });
                             },
                           ),
@@ -86,7 +97,7 @@ class _SaleItemCardState extends State<SaleItemCard> {
                                 style: TextStyle(color: Colors.redAccent),
                               ),
                               AutoSizeText(
-                                widget.price,
+                                priceItem.toString(),
                                 minFontSize: 64.0,
                                 maxFontSize: 256.0,
                                 style: TextStyle(
@@ -111,7 +122,7 @@ class _SaleItemCardState extends State<SaleItemCard> {
             ),
             elevation: 5.0,
             child: Image.network(
-              'https://www.beatsbydre.com/content/dam/beats/web/pcp/headphones/solo3_wireless/_0001_MNEN2-RGB-bttm.png.small.2x.png',
+              widget.item.data['image'],
               height: Environment().getHeight(height: 12.0),
               width: Environment().getWidth(width: 10.0),
               fit: BoxFit.fitHeight,

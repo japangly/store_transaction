@@ -3,13 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:store_transaction/functions/firebase_firestore.dart';
-import 'package:store_transaction/print.dart';
-import 'package:store_transaction/stock_screen.dart';
-import 'package:store_transaction/themes/helpers/fonts.dart';
-import 'package:store_transaction/themes/helpers/theme_colors.dart';
-import 'package:store_transaction/total_calculate.dart';
-import 'package:store_transaction/user_profile.dart';
+
+import 'functions/firebase_firestore.dart';
+import 'print.dart';
+import 'stock_screen.dart';
+import 'themes/helpers/fonts.dart';
+import 'themes/helpers/theme_colors.dart';
+import 'total_calculate.dart';
+import 'user_profile.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -17,6 +18,8 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  SharedPreferences sharedPreferences;
+
   Widget sale() {
     return Container(
       child: FloatingActionButton(
@@ -39,17 +42,11 @@ class _DashboardState extends State<Dashboard> {
   Widget service() {
     return Container(
       child: FloatingActionButton(
-        onPressed: () async {
-          List<DocumentSnapshot> documents = await Database().getAllCollection(
-            collection: 'products',
-            sortBy: 'name',
-            order: false,
-          );
+        onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  ListTotal(documents: documents),
+              builder: (BuildContext context) => ListTotal(),
             ),
           );
         },
@@ -76,7 +73,6 @@ class _DashboardState extends State<Dashboard> {
             child: child));
   }
 
-  SharedPreferences sharedPreferences;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,7 +89,6 @@ class _DashboardState extends State<Dashboard> {
           ),
           onPressed: () async {
             sharedPreferences = await SharedPreferences.getInstance();
-            print(sharedPreferences.get('keyUserId'));
             DocumentSnapshot ducuments = await Database()
                 .getCurrentUserInfo(userId: sharedPreferences.get('keyUserId'));
             Navigator.push(
@@ -273,7 +268,7 @@ class _DashboardState extends State<Dashboard> {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('លេខរង់ចាំរបស់អ្នកគឺ',
+                    Text('Your waiting number is',
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w700,
@@ -297,7 +292,7 @@ class _DashboardState extends State<Dashboard> {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('លេខរង់ចាំរបស់អ្នកគឺ',
+                    Text('Your waiting number is',
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w700,
