@@ -63,7 +63,6 @@ class _PrintScreenState extends State<PrintScreen> {
                                 showTitleActions: true,
                                 minTime: DateTime(2019, 1, 1),
                                 onChanged: (date) {
-                              // print('change $date');
                             }, onConfirm: (date) {
                               setState(() {
                                 _startDate = DateTime.utc(
@@ -77,7 +76,6 @@ class _PrintScreenState extends State<PrintScreen> {
                                   date.day + 1,
                                 );
                               });
-                              // print('confirm $date');
                               showDialog(
                                   context: context,
                                   builder: (_) {
@@ -104,8 +102,6 @@ class _PrintScreenState extends State<PrintScreen> {
                                 DateTime.now().month,
                                 DateTime.now().day,
                               );
-                              print('start ' + _startDate.toString());
-                              print('now ' + DateTime.now().toString());
                             });
                             showDialog(
                                 context: context,

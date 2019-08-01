@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:recase/recase.dart';
 
@@ -8,24 +11,28 @@ import 'dialog/receipt_dialog.dart';
 import 'functions/firebase_firestore.dart';
 import 'helper/search_library.dart';
 import 'sale_card.dart';
-import 'service_card.dart';
 import 'themes/helpers/theme_colors.dart';
 
 class ListTotal extends StatefulWidget {
-  const ListTotal({Key key, @required this.documents}) : super(key: key);
-
-  final List<DocumentSnapshot> documents;
+  const ListTotal({
+    Key key,
+  }) : super(key: key);
 
   @override
   _ListTotalState createState() => _ListTotalState();
 }
 
-List<Widget> addService;
+List<Widget> addService = [];
 
 class _ListTotalState extends State<ListTotal> {
+  final _formKey = new GlobalKey<FormState>();
+  List<Widget> cardItem = addService;
+  
+
   String _name = 'No one';
 
-  _buildMaterialSearchPage(BuildContext context) {
+  _buildMaterialSearchPage(
+      BuildContext context, List<DocumentSnapshot> documents) {
     return new MaterialPageRoute<String>(
         settings: RouteSettings(
           name: 'material_search',
@@ -42,7 +49,7 @@ class _ListTotalState extends State<ListTotal> {
                 return Material(
                   child: MaterialSearch<String>(
                     placeholder: 'Search',
-                    results: widget.documents
+                    results: documents
                         .map((DocumentSnapshot v) =>
                             MaterialSearchResult<String>(
                               imageSrc: v.data['image'],
@@ -54,8 +61,10 @@ class _ListTotalState extends State<ListTotal> {
                       return value.data['name'].toLowerCase().trim().contains(
                           RegExp(r'' + criteria.toLowerCase().trim() + ''));
                     },
-                    onSelect: (dynamic value) =>
-                        Navigator.of(context).pop(value),
+                    onSelect: (DocumentSnapshot value) {
+                      cardItem.add(SaleItemCard(item: value));
+                      Navigator.of(context, rootNavigator: true).pop();
+                    },
                     onSubmit: (String value) =>
                         Navigator.of(context).pop(value),
                   ),
@@ -64,31 +73,12 @@ class _ListTotalState extends State<ListTotal> {
         });
   }
 
-  _showMaterialSearch(BuildContext context) {
+  _showMaterialSearch(BuildContext context, List<DocumentSnapshot> documents) {
     Navigator.of(context)
-        .push(_buildMaterialSearchPage(context))
+        .push(_buildMaterialSearchPage(context, documents))
         .then((dynamic value) {
       setState(() => _name = value as String);
     });
-  }
-
-  List<Widget> children() {
-    return <Widget>[
-      ServicePriceCard(
-        makerName: 'null',
-        serviceName: 'Makeup',
-        price: '5',
-      ),
-      ServicePriceCard(
-        makerName: 'null',
-        serviceName: 'Hair washing',
-        price: '5',
-      ),
-      SaleItemCard(
-        price: '10',
-        productName: 'null',
-      ),
-    ];
   }
 
   @override
@@ -104,8 +94,14 @@ class _ListTotalState extends State<ListTotal> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),
-            onPressed: () {
-              _showMaterialSearch(context);
+            onPressed: () async {
+              List<DocumentSnapshot> documents =
+                  await Database().getAllCollection(
+                collection: 'products',
+                sortBy: 'name',
+                order: false,
+              );
+              _showMaterialSearch(context, documents);
             },
           )
         ],
@@ -140,7 +136,7 @@ class _ListTotalState extends State<ListTotal> {
             Flexible(
               child: ListView(
                 scrollDirection: Axis.horizontal,
-                children: children(),
+                children: cardItem,
               ),
             ),
           ],
@@ -156,12 +152,15 @@ class _ListTotalState extends State<ListTotal> {
               heroTag: 's1',
               elevation: 5.0,
               onPressed: () async {
-                DocumentSnapshot servicesDocument = await Database()
-                    .getCollectionByDocumentId(
-                        collection: 'category', documentId: 'services');
-                DocumentSnapshot employeesDocument = await Database()
-                    .getCollectionByDocumentId(
-                        collection: 'category', documentId: 'employees');
+                List<DocumentSnapshot> servicesDocument = await Database()
+                    .getAllCollection(
+                        collection: 'services', order: false, sortBy: 'name');
+                List<DocumentSnapshot> employeesDocument =
+                    await Database().getAllCollection(
+                  collection: 'employees',
+                  order: false,
+                  sortBy: 'role',
+                );
                 showDialog(
                     context: context,
                     builder: (_) {
@@ -195,5 +194,11 @@ class _ListTotalState extends State<ListTotal> {
         ],
       ),
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    
   }
 }

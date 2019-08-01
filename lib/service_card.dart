@@ -1,17 +1,16 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'env.dart';
 
 class ServicePriceCard extends StatefulWidget {
-  final String serviceName;
-  final String makerName;
-  final String price;
+  final DocumentSnapshot documentService;
+  final DocumentSnapshot documentEmployee;
   const ServicePriceCard({
     Key key,
-    @required this.serviceName,
-    @required this.makerName,
-    @required this.price,
+    @required this.documentService,
+    @required this.documentEmployee,
   }) : super(key: key);
 
   @override
@@ -46,7 +45,7 @@ class _ServicePriceCardState extends State<ServicePriceCard> {
                         Padding(
                           padding: const EdgeInsets.only(top: 32.0),
                           child: AutoSizeText(
-                            widget.serviceName,
+                            widget.documentService.data['name'],
                             minFontSize: 32.0,
                             maxFontSize: 256.0,
                             style: TextStyle(fontWeight: FontWeight.bold),
@@ -55,7 +54,7 @@ class _ServicePriceCardState extends State<ServicePriceCard> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 16.0),
                           child: AutoSizeText(
-                            'Head & Hair',
+                            widget.documentService.data['category'],
                             minFontSize: 24.0,
                             maxFontSize: 256.0,
                             style: TextStyle(color: Colors.grey),
@@ -64,7 +63,7 @@ class _ServicePriceCardState extends State<ServicePriceCard> {
                         Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: AutoSizeText(
-                            widget.makerName,
+                            '${widget.documentEmployee.data['last name']} ${widget.documentEmployee.data['first name']}',
                             minFontSize: 24.0,
                             maxFontSize: 256.0,
                           ),
@@ -82,7 +81,7 @@ class _ServicePriceCardState extends State<ServicePriceCard> {
                                 style: TextStyle(color: Colors.redAccent),
                               ),
                               AutoSizeText(
-                                widget.price,
+                                widget.documentService.data['price'].toString(),
                                 minFontSize: 64.0,
                                 maxFontSize: 256.0,
                                 style: TextStyle(

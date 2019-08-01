@@ -19,24 +19,41 @@ class AddServices extends StatefulWidget {
       @required this.documentEmployees})
       : super(key: key);
 
-  final DocumentSnapshot documentEmployees;
-  final DocumentSnapshot documentService;
+  final List<DocumentSnapshot> documentEmployees;
+  final List<DocumentSnapshot> documentService;
 
   @override
   _AddServicesState createState() => _AddServicesState();
 }
 
 class _AddServicesState extends State<AddServices> {
-  List<String> _listEmployee;
-  List<String> _listService;
+  List<String> _listEmployee = [];
+  List<String> _listService = [];
 
   @override
   void initState() {
     super.initState();
-    _listService = List.from(widget.documentService.data['category']);
-    _listEmployee = List.from(widget.documentEmployees.data['category']);
-    _listService.sort();
-    _listEmployee.sort();
+
+    for (int service = 0; service < widget.documentService.length; service++) {
+
+      setState(() {
+        String servicename = widget.documentService[service].data['name'];
+        _listService.add(servicename);
+      });
+    }
+
+    for (int employee = 0;
+        employee < widget.documentService.length;
+        employee++) {
+      String employName =
+          '${widget.documentEmployees[employee].data['last name']} ${widget.documentEmployees[employee].data['first name']}';
+      _listEmployee.add(employName);
+      // _listEmployee = List.from(employName);
+    }
+    setState(() {
+      _listService.sort();
+      _listEmployee.sort();
+    });
   }
 
   @override
@@ -130,16 +147,7 @@ class _AddServicesState extends State<AddServices> {
                         minFontSize: 24.0,
                         style: TextStyle(color: Colors.white),
                       ),
-                      onPressed: () {
-                        if (_selectedName != 'PERSON NAME' &&
-                            _selectedService != 'SERVICE') {
-                          addService.add(ServicePriceCard(
-                            makerName: _selectedName,
-                            serviceName: _selectedService,
-                            price: '5',
-                          ));
-                        }
-                      },
+                      onPressed: addCardService,
                     ),
                   ],
                 ),
@@ -149,5 +157,48 @@ class _AddServicesState extends State<AddServices> {
         ),
       ),
     );
+  }
+
+  void addCardService() {
+    if (_selectedName != 'PERSON NAME' && _selectedService != 'SERVICE') {
+      List<String> name = _selectedName.split(" ");
+      String _lname = name[0];
+      String _fname = name[1];
+
+      DocumentSnapshot _documentService;
+      DocumentSnapshot _documentEmployee;
+
+      for (int doc = 0; doc < widget.documentService.length; doc++) {
+        if (widget.documentService[doc].data['name'] == _selectedService) {
+          setState(() {
+            _documentService = widget.documentService[doc];
+          });
+        }
+      }
+
+      for (int em = 0; em < widget.documentEmployees.length; em++) {
+        if (widget.documentEmployees[em].data['last name'] == _lname &&
+            widget.documentEmployees[em].data['first name'] == _fname) {
+          setState(() {
+            _documentEmployee = widget.documentEmployees[em];
+          });
+        }
+      }
+      setState(() {
+        addService.add(ServicePriceCard(
+          documentService: _documentService,
+          documentEmployee: _documentEmployee,
+        ));
+        // ListTotal();
+        Navigator.of(context, rootNavigator: true).pop('');
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _listEmployee = [];
+    _listService = [];
   }
 }

@@ -164,7 +164,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                     );
                                   }
                                 } else {
-                                  print('object');
                                   showDialog(
                                       context: context,
                                       builder: (_) {

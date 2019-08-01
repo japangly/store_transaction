@@ -23,7 +23,6 @@ class Database {
           .where('uid', isEqualTo: userId)
           .limit(1)
           .getDocuments();
-      print(querySnapshot.documents.first);
       return querySnapshot.documents.first;
     } catch (error) {
       print(error);

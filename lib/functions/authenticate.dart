@@ -36,10 +36,10 @@ class Authenticate {
     user = await getCurrentUser();
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     try {
-      firebaseAuth
-          .signInWithEmailAndPassword(email: user.email, password: oldPassword)
-          .then((reAuth) {
-        user.updatePassword(newPassword);
+      FirebaseUser reAuthUser = await firebaseAuth.signInWithEmailAndPassword(
+          email: user.email, password: oldPassword);
+      if (reAuthUser.uid != null) {
+        reAuthUser.updatePassword(newPassword);
         sharedPreferences.clear().whenComplete(() {
           Navigator.of(context)
               .pushAndRemoveUntil(
@@ -49,16 +49,21 @@ class Authenticate {
             Authenticate().signOut();
           });
         });
-      });
-      print('success changed password');
-      return true;
+      }
+      print('Success changed password');
     } catch (error) {
       print(error);
       return false;
     }
   }
 
-  Future<void> resetPassword({@required String email}) async {
-    await firebaseAuth.sendPasswordResetEmail(email: email);
+  Future<bool> resetPassword({@required String email}) async {
+    try {
+      await firebaseAuth.sendPasswordResetEmail(email: email);
+      return true;
+    } catch (error) {
+      print(error);
+      return false;
+    }
   }
 }

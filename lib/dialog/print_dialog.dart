@@ -4,63 +4,30 @@ import 'package:flutter_icons/ionicons.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
+import 'package:recase/recase.dart';
 
 import '../env.dart';
 import '../functions/firebase_firestore.dart';
 import '../themes/helpers/buttons.dart';
 import '../themes/helpers/theme_colors.dart';
 
-class PrintDialog extends StatefulWidget {
-  const PrintDialog({Key key, @required this.setDate, @required this.endDate})
-      : super(key: key);
+const String defaultHtml =
+    '<!DOCTYPE html><div lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <meta http-equiv="X-UA-Compatible" content="ie=edge"> <title>Document</title> </head> <style> @media print { table { page-break-after: auto } tr { page-break-inside: avoid; page-break-after: auto } td { page-break-inside: avoid; page-break-after: auto } thead { display: table-header-group } tfoot { display: table-footer-group } } body { margin: 2em; } table, td, th { border: 1px solid #ddd; text-align: left; } table { border-collapse: collapse; width: 100%; } th, td { padding: 15px; } </style> <body>';
 
+const String htmlPaperTitle =
+    '<tfoot style="margin: 100px;"> <tr> <td></td> </tr> </tfoot> <tr> <td> <div></div> </td> </tr> <tr> <td> <div></div> </td> </tr> <table>';
+
+const String htmlTableTitle =
+    '<tr> <th>No.</th> <th>Product</th> <th>Category</th> <th>Quantity</th> <th>Description</th> <th>Employee</th> </tr>';
+
+class PrintDialog extends StatelessWidget {
+  const PrintDialog({
+    Key key,
+    @required this.setDate,
+    @required this.endDate,
+  }) : super(key: key);
   final DateTime setDate;
   final DateTime endDate;
-
-  @override
-  _PrintDialogState createState() => _PrintDialogState();
-}
-
-class _PrintDialogState extends State<PrintDialog> {
-  static const String htmlFooter =
-      ' </tbody> <tfoot> </tfoot> </table></body><div class="space"></div><p align="center">Please Sign Here</p><div class="rectangle"></div></html>';
-
-  static const String htmlHeader =
-      '<!DOCTYPE html><html><head> <style> .rectangle { height: 128px; width: 50%; border-style: solid; border-color: #707B7C; border-radius: 25px; margin: 0 auto; } .space { height: 32px; width: 50%; background-color: #fff; } tfoot { display: table-footer-group; vertical-align: middle; border-color: inherit; } @page { margin: 2mm } table, td, th { border: 1px solid #566573; text-align: left; } table { font-size:1vw; border-collapse: collapse; width: 100%; } th, td { padding: 15px; } .header, .header-space, .footer, .footer-space { height: 10px; } .header { position: fixed; top: 0; } .footer { position: fixed; bottom: 10; } </style></head><body>';
-
-  static const String htmlPaperTitle =
-      '<body> <h2>Mickey and Honey Salon</h2> <h3>Daily Stock Report</h3> <p>Date: </p> <table> <thead>';
-
-  static const String htmlTableTitle =
-      ' <th>No.</th> <th>Product Name</th> <th>Quantity</th> <th>Action</th> <th>Action Description</th> <th>Employee ID</th> <th>Employee Name</th> <th>Date</th> </tr> </thead> <tbody class="content">';
-
-  Future<String> getReportData() async {
-    String result = '';
-
-    List<DocumentSnapshot> documents = await Database().getHistoryProduction(
-        collection: 'product_history',
-        field: 'date',
-        dateTime: Timestamp.fromDate(widget.setDate),
-        endDate: Timestamp.fromDate(widget.endDate));
-
-    if (documents != null) {
-      for (int i = 0; i < documents.length; i++) {
-        var date = DateFormat('d MMM y HH:mm a')
-            .format(documents[i].data['date of birth'].toDate())
-            .toString();
-        print('print date' + documents[i].data['date'].toString());
-        print('date format' + date);
-        result +=
-            '<tr> <td>${i++}</td> <td>${documents[i].data['product name']}</td> <td>${documents[i].data['quantity']}</td> <td>Sale</td> <td>Sale to customer</td> <td>${documents[i].data['employee id']}</td> <td>${documents[i].data['employee last name']}+'
-            '+ ${documents[i].data['employee first name']} </td> <td>${documents[i].data['date']}</td> </tr>';
-      }
-    } else {
-      result += '';
-    }
-    print('result ' + result);
-    return result;
-  }
-
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -84,7 +51,7 @@ class _PrintDialogState extends State<PrintDialog> {
                   Padding(
                     padding: const EdgeInsets.only(top: 20.0),
                     child: Text(
-                      'You are printing a report of ${widget.setDate}',
+                      'You are printing a report of $setDate',
                       style: TextStyle(fontSize: 20),
                       textAlign: TextAlign.center,
                     ),
@@ -96,14 +63,44 @@ class _PrintDialogState extends State<PrintDialog> {
                       children: <Widget>[
                         CustomButton(
                           onPressed: () async {
+                            String date = DateFormat('yMMMMEEEEd')
+                                .format(setDate)
+                                .toString();
+                            String htmlHeader =
+                                '<thead> <tr> <th>Date: $date</th> </tr> </thead> <h2>Mickey Salon Daily Report</h2> <p>The report is about the in-going and out-going of the Mickey Salon.</p>';
+                            String htmlFooter =
+                                ' </table> <div style="margin-top: 50px;"></div> <div style="display: flex; justify-content: space-around"> <div></div> <div></div> <div></div> <div> <p>Salon Administrator Signature</p> <div style="margin-top: 100px;"></div> <p>Date: $date</p> </div> </div> </body></div>';
+                            String result = '';
+
+                            List<DocumentSnapshot> documents = await Database()
+                                .getHistoryProduction(
+                                    collection: 'product_history',
+                                    field: 'date',
+                                    dateTime: Timestamp.fromDate(setDate),
+                                    endDate: Timestamp.fromDate(endDate));
+
+                            if (documents != null) {
+                              for (int i = 0; i < documents.length; i++) {
+                                DocumentSnapshot document =
+                                    await Database().getCollectionByField(
+                                  collection: 'employees',
+                                  field: 'uid',
+                                  value: documents[i].data['uid'],
+                                );
+                                int no = i + 1;
+                                result +=
+                                    '<tr> <td>${ReCase(no.toString()).titleCase}</td> <td>${ReCase(documents[i].data['product name'].toString()).titleCase}</td> <td>${ReCase(documents[i].data['product category'].toString()).titleCase}</td> <td>${ReCase(documents[i].data['quantity'].toString()).titleCase}</td> <td>${ReCase(documents[i].data['action'].toString()).titleCase}</td> <td>${ReCase(document['first name'].toString()).titleCase} ${ReCase(document['last name'].toString()).titleCase}</td> </tr>';
+                              }
+                            }
                             await Printing.layoutPdf(
                               onLayout: (PdfPageFormat format) async {
                                 return await Printing.convertHtml(
                                   format: format,
-                                  html: htmlHeader +
+                                  html: defaultHtml +
+                                      htmlHeader +
                                       htmlPaperTitle +
                                       htmlTableTitle +
-                                      await getReportData() +
+                                      result +
                                       htmlFooter,
                                 );
                               },
