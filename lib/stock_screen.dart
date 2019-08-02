@@ -1,22 +1,47 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:store_transaction/env.dart';
-import 'package:store_transaction/functions/firebase_firestore.dart';
-import 'package:store_transaction/themes/helpers/theme_colors.dart';
 
 import 'dialog/stock_dialog.dart';
+import 'env.dart';
+import 'functions/firebase_firestore.dart';
 import 'helper/counter.dart';
+import 'sale_card.dart';
+import 'themes/helpers/theme_colors.dart';
 
 int _defaultValue = 1;
 String _selectedName = 'NAME';
 
 class ConfirmDeductFromStock extends StatefulWidget {
+  const ConfirmDeductFromStock({Key key, @required this.employeesList})
+      : super(key: key);
+
+  final List<DocumentSnapshot> employeesList;
+
   @override
   _ConfirmDeductFromStockState createState() => _ConfirmDeductFromStockState();
 }
 
 class _ConfirmDeductFromStockState extends State<ConfirmDeductFromStock> {
+  TextEditingController _barcode = TextEditingController();
+  List<String> employeesName = [];
+  List<Widget> cardItem = [];
+
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.employeesList.length > 0) {
+      for (int em = 0; em < widget.employeesList.length; em++) {
+        String name =
+            '${widget.employeesList[em].data['last name']} ${widget.employeesList[em].data['first name']}';
+        setState(() {
+          employeesName.add(name);
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,52 +57,63 @@ class _ConfirmDeductFromStockState extends State<ConfirmDeductFromStock> {
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
         },
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 64.0, right: 64.0, top: 32.0, bottom: 32.0),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8.0),
+        child: Form(
+          onChanged: () async {
+            if (_barcode.text != '') {
+             await Database()
+                  .getCollectionByField(
+                collection: 'products',
+                field: 'barcode',
+                value: _barcode.text,
+              )
+                  .then((onValue) {
+                if (onValue == null) {
+                  print('product null');
+                } else {
+                  print('not null');
+                  setState(() {
+                    cardItem.add(SaleItemCard(
+                      item: onValue,
+                    ));
+                  });
+                }
+              });
+            }
+          },
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 64.0, right: 64.0, top: 32.0, bottom: 32.0),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(8.0),
+                    ),
                   ),
-                ),
-                elevation: 4.0,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    labelText: "Barcode",
-                    labelStyle: TextStyle(fontSize: 24.0),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+                  elevation: 4.0,
+                  child: TextFormField(
+                    autofocus: true,
+                    controller: _barcode,
+                    decoration: InputDecoration(
+                      labelText: "Barcode",
+                      labelStyle: TextStyle(fontSize: 24.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Flexible(
-              child: StreamBuilder<QuerySnapshot>(
-                  stream: Database().getStreamCollection(
-                    collection: 'products',
-                    orderBy: 'name',
-                    isDescending: false,
-                  ),
-                  builder: (BuildContext context, snapshot) {
-                    List<Widget> listWidget = [];
-                    for (int i = 0; i < snapshot.data.documents.length; i++) {
-                      listWidget.add(DeductStockCard(
-                        productDocument: snapshot.data.documents[i],
-                      ));
-                    }
-
-                    return ListView(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      children: listWidget,
-                    );
-                  }),
-            ),
-          ],
+              Flexible(
+                child: ListView(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  children: cardItem,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -100,17 +136,30 @@ class _ConfirmDeductFromStockState extends State<ConfirmDeductFromStock> {
 }
 
 class DeductStockCard extends StatefulWidget {
-  final DocumentSnapshot productDocument;
   const DeductStockCard({
     Key key,
     @required this.productDocument,
+    @required this.employeesName,
   }) : super(key: key);
+
+  final DocumentSnapshot productDocument;
+  final List<String> employeesName;
 
   @override
   _DeductStockCardState createState() => _DeductStockCardState();
 }
 
 class _DeductStockCardState extends State<DeductStockCard> {
+  List<String> employeeName = [];
+  int priceItem = 0;
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      priceItem = widget.productDocument.data['sale price'];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -181,8 +230,7 @@ class _DeductStockCardState extends State<DeductStockCard> {
                             _selectedName,
                             minFontSize: 24.0,
                           ),
-                          items: <String>['Nou TithPanha', 'Num Pang Sach']
-                              .map((String value) {
+                          items: widget.employeesName.map((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: AutoSizeText(

@@ -24,11 +24,18 @@ class _DashboardState extends State<Dashboard> {
     return Container(
       child: FloatingActionButton(
         backgroundColor: Colors.lightBlue,
-        onPressed: () {
+        onPressed: () async {
+          var employees = await Database().getAllCollection(
+            collection: 'employees',
+            sortBy: 'last name',
+            order: false,
+          );
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => ConfirmDeductFromStock(),
+              builder: (BuildContext context) => ConfirmDeductFromStock(
+                employeesList: employees,
+              ),
             ),
           );
         },

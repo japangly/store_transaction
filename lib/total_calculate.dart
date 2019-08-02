@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -26,9 +24,17 @@ List<Widget> addService = [];
 
 class _ListTotalState extends State<ListTotal> {
   final _formKey = new GlobalKey<FormState>();
+  TextEditingController _barcode = TextEditingController();
+  FocusNode _textFocus = new FocusNode();
   List<Widget> cardItem = addService;
-
   String _name = 'No one';
+
+  @override
+  void dispose() {
+    super.dispose();
+    _barcode.dispose();
+    _textFocus.dispose();
+  }
 
   _buildMaterialSearchPage(
       BuildContext context, List<DocumentSnapshot> documents) {
@@ -121,7 +127,28 @@ class _ListTotalState extends State<ListTotal> {
                   ),
                 ),
                 elevation: 4.0,
-                child: TextFormField(
+                child: TextField(
+                  onChanged: (value) async {
+                    if (_barcode.text != '') {
+                      Database()
+                          .getCollectionByField(
+                        collection: 'products',
+                        field: 'barcode',
+                        value: _barcode.text,
+                      )
+                          .then((onValue) {
+                        if (onValue == null) {
+                          print('product null');
+                        } else {
+                          cardItem.add(SaleItemCard(
+                            item: onValue,
+                          ));
+                        }
+                      });
+                    }
+                  },
+                  autofocus: true,
+                  controller: _barcode,
                   decoration: InputDecoration(
                     labelText: "Barcode",
                     labelStyle: TextStyle(fontSize: 24.0),
