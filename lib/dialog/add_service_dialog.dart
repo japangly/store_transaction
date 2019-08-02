@@ -31,6 +31,13 @@ class _AddServicesState extends State<AddServices> {
   List<String> _listService = [];
 
   @override
+  void dispose() {
+    super.dispose();
+    _listEmployee = [];
+    _listService = [];
+  }
+
+  @override
   void initState() {
     super.initState();
 
@@ -48,12 +55,47 @@ class _AddServicesState extends State<AddServices> {
       String employName =
           '${widget.documentEmployees[employee].data['last name']} ${widget.documentEmployees[employee].data['first name']}';
       _listEmployee.add(employName);
-      // _listEmployee = List.from(employName);
     }
     setState(() {
       _listService.sort();
       _listEmployee.sort();
     });
+  }
+
+  void addCardService() {
+    if (_selectedName != 'PERSON NAME' && _selectedService != 'SERVICE') {
+      List<String> name = _selectedName.split(" ");
+      String _lname = name[0];
+      String _fname = name[1];
+
+      DocumentSnapshot _documentService;
+      DocumentSnapshot _documentEmployee;
+
+      for (int doc = 0; doc < widget.documentService.length; doc++) {
+        if (widget.documentService[doc].data['name'] == _selectedService) {
+          setState(() {
+            _documentService = widget.documentService[doc];
+          });
+        }
+      }
+
+      for (int em = 0; em < widget.documentEmployees.length; em++) {
+        if (widget.documentEmployees[em].data['last name'] == _lname &&
+            widget.documentEmployees[em].data['first name'] == _fname) {
+          setState(() {
+            _documentEmployee = widget.documentEmployees[em];
+          });
+        }
+      }
+      setState(() {
+        addService.add(ServicePriceCard(
+          documentService: _documentService,
+          documentEmployee: _documentEmployee,
+        ));
+        // ListTotal();
+        Navigator.of(context, rootNavigator: true).pop('');
+      });
+    }
   }
 
   @override
@@ -157,48 +199,5 @@ class _AddServicesState extends State<AddServices> {
         ),
       ),
     );
-  }
-
-  void addCardService() {
-    if (_selectedName != 'PERSON NAME' && _selectedService != 'SERVICE') {
-      List<String> name = _selectedName.split(" ");
-      String _lname = name[0];
-      String _fname = name[1];
-
-      DocumentSnapshot _documentService;
-      DocumentSnapshot _documentEmployee;
-
-      for (int doc = 0; doc < widget.documentService.length; doc++) {
-        if (widget.documentService[doc].data['name'] == _selectedService) {
-          setState(() {
-            _documentService = widget.documentService[doc];
-          });
-        }
-      }
-
-      for (int em = 0; em < widget.documentEmployees.length; em++) {
-        if (widget.documentEmployees[em].data['last name'] == _lname &&
-            widget.documentEmployees[em].data['first name'] == _fname) {
-          setState(() {
-            _documentEmployee = widget.documentEmployees[em];
-          });
-        }
-      }
-      setState(() {
-        addService.add(ServicePriceCard(
-          documentService: _documentService,
-          documentEmployee: _documentEmployee,
-        ));
-        // ListTotal();
-        Navigator.of(context, rootNavigator: true).pop('');
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _listEmployee = [];
-    _listService = [];
   }
 }
