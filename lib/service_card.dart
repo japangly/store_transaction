@@ -38,27 +38,31 @@ class _ServicePriceCardState extends State<ServicePriceCard> {
                   elevation: 4.0,
                   child: Padding(
                     padding:
-                        const EdgeInsets.fromLTRB(128.0, 32.0, 128.0, 32.0),
+                        const EdgeInsets.fromLTRB(128.0, 72.0, 128.0, 32.0),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(top: 32.0),
-                          child: AutoSizeText(
-                            widget.documentService.data['name'],
-                            minFontSize: 32.0,
-                            maxFontSize: 256.0,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          child: AutoSizeText(
-                            widget.documentService.data['category'],
-                            minFontSize: 24.0,
-                            maxFontSize: 256.0,
-                            style: TextStyle(color: Colors.grey),
-                          ),
+                        Column(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(top: 32.0),
+                              child: AutoSizeText(
+                                widget.documentService.data['name'],
+                                minFontSize: 32.0,
+                                maxFontSize: 256.0,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 16.0),
+                              child: AutoSizeText(
+                                widget.documentService.data['category'],
+                                minFontSize: 24.0,
+                                maxFontSize: 256.0,
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                          ],
                         ),
                         Padding(
                           padding: const EdgeInsets.all(16.0),
@@ -111,8 +115,8 @@ class _ServicePriceCardState extends State<ServicePriceCard> {
               ),
               child: Image.network(
                 'https://sleepmatters.ie/wp-content/uploads/2018/05/Child-Bath-Every-Night.jpg',
-                height: Environment().getHeight(height: 12.0),
-                width: Environment().getWidth(width: 10.0),
+                height: Environment().getHeight(height: 10.0),
+                width: Environment().getWidth(width: 8.0),
                 fit: BoxFit.fitHeight,
                 scale: 30.0,
               ),
