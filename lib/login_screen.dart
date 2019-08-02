@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:recase/recase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:store_transaction/change_password.dart';
 import 'package:store_transaction/reset_password.dart';
 
 import 'dashboard.dart';

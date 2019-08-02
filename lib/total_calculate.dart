@@ -27,7 +27,6 @@ List<Widget> addService = [];
 class _ListTotalState extends State<ListTotal> {
   final _formKey = new GlobalKey<FormState>();
   List<Widget> cardItem = addService;
-  
 
   String _name = 'No one';
 
@@ -199,6 +198,5 @@ class _ListTotalState extends State<ListTotal> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    
   }
 }

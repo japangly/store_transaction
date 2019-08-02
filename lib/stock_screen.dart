@@ -5,7 +5,7 @@ import 'package:store_transaction/env.dart';
 import 'package:store_transaction/functions/firebase_firestore.dart';
 import 'package:store_transaction/themes/helpers/theme_colors.dart';
 
-import 'dialog/receipt_dialog.dart';
+import 'dialog/stock_dialog.dart';
 import 'helper/counter.dart';
 
 int _defaultValue = 1;
@@ -87,7 +87,7 @@ class _ConfirmDeductFromStockState extends State<ConfirmDeductFromStock> {
           showDialog(
               context: context,
               builder: (_) {
-                return ReceiptDialog();
+                return StockDialog();
               });
         },
         child: Icon(
