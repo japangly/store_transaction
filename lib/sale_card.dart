@@ -6,6 +6,11 @@ import 'env.dart';
 import 'helper/counter.dart';
 
 int _defaultValue = 1;
+String _selectedName = 'Name';
+List<String> _listEmployee = [
+  'SBT',
+  'TVFB',
+];
 
 class SaleItemCard extends StatefulWidget {
   final DocumentSnapshot item;
@@ -47,9 +52,10 @@ class _SaleItemCardState extends State<SaleItemCard> {
                   ),
                   elevation: 4.0,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(128.0, 0.0, 128.0, 32.0),
+                    padding:
+                        const EdgeInsets.fromLTRB(128.0, 100.0, 128.0, 8.0),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         AutoSizeText(
                           widget.item.data['name'],
@@ -83,6 +89,26 @@ class _SaleItemCardState extends State<SaleItemCard> {
                               });
                             },
                           ),
+                        ),
+                        DropdownButton<String>(
+                          hint: AutoSizeText(
+                            _selectedName,
+                            minFontSize: 24.0,
+                          ),
+                          items: _listEmployee.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: AutoSizeText(
+                                value,
+                                minFontSize: 24.0,
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (selected) {
+                            setState(() {
+                              _selectedName = selected;
+                            });
+                          },
                         ),
                         Padding(
                           padding: const EdgeInsets.all(16.0),
@@ -121,11 +147,16 @@ class _SaleItemCardState extends State<SaleItemCard> {
               ),
             ),
             elevation: 5.0,
-            child: Image.network(
-              widget.item.data['image'],
-              height: Environment().getHeight(height: 12.0),
-              width: Environment().getWidth(width: 10.0),
-              fit: BoxFit.fitHeight,
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(
+                Radius.circular(16.0),
+              ),
+              child: Image.network(
+                widget.item.data['image'],
+                height: Environment().getHeight(height: 10.0),
+                width: Environment().getWidth(width: 8.0),
+                fit: BoxFit.fill,
+              ),
             ),
           ),
           Padding(
