@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:recase/recase.dart';
 
-import 'dialog/add_service_dialog.dart';
+import 'add_service_screen.dart';
 import 'dialog/receipt_dialog.dart';
 import 'functions/firebase_firestore.dart';
 import 'helper/search_library.dart';
@@ -23,11 +23,17 @@ class ListTotal extends StatefulWidget {
 List<Widget> addService = [];
 
 class _ListTotalState extends State<ListTotal> {
-  final _formKey = new GlobalKey<FormState>();
-  TextEditingController _barcode = TextEditingController();
-  FocusNode _textFocus = new FocusNode();
   List<Widget> cardItem = addService;
+
+  TextEditingController _barcode = TextEditingController();
+  final _formKey = new GlobalKey<FormState>();
   String _name = 'No one';
+  FocusNode _textFocus = new FocusNode();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
 
   @override
   void dispose() {
@@ -187,13 +193,19 @@ class _ListTotalState extends State<ListTotal> {
                   order: false,
                   sortBy: 'role',
                 );
-                showDialog(
-                    context: context,
-                    builder: (_) {
-                      return AddServices(
-                          documentService: servicesDocument,
-                          documentEmployees: employeesDocument);
-                    });
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => AddService(),
+                  ),
+                );
+                // showDialog(
+                //     context: context,
+                //     builder: (_) {
+                //       return AddServices(
+                //           documentService: servicesDocument,
+                //           documentEmployees: employeesDocument);
+                //     });
               },
               child: Icon(
                 Icons.add,
@@ -220,10 +232,5 @@ class _ListTotalState extends State<ListTotal> {
         ],
       ),
     );
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
   }
 }
