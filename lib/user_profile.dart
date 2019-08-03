@@ -1,11 +1,22 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'change_password.dart';
 import 'env.dart';
+import 'functions/authenticate.dart';
+import 'login_screen.dart';
 import 'themes/helpers/fonts.dart';
 import 'themes/helpers/theme_colors.dart';
 
 class UserProfile extends StatefulWidget {
+  const UserProfile({Key key, @required this.documentSnapshot})
+      : super(key: key);
+
+  final DocumentSnapshot documentSnapshot;
+
   @override
   _UserProfileState createState() => _UserProfileState();
 }
@@ -15,7 +26,26 @@ class _UserProfileState extends State<UserProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.pinkAccent,
           centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.settings,
+                size: 30.0,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return ChangePasswordScreen();
+                    },
+                  ),
+                );
+              },
+            )
+          ],
           title: Text('Profile',
               style: TextStyle(color: Colors.white, fontSize: 30.0)),
         ),
@@ -35,7 +65,7 @@ class _UserProfileState extends State<UserProfile> {
                             minRadius: Environment().getHeight(height: 5),
                             maxRadius: Environment().getHeight(height: 5),
                             backgroundImage: NetworkImage(
-                              'https://media.femalemag.com.sg/2019/03/51021013_237686723851021_5419594866899599564_n-750x938.jpg',
+                              widget.documentSnapshot.data['image'],
                             ),
                           ),
                         ),
@@ -45,7 +75,7 @@ class _UserProfileState extends State<UserProfile> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          'Liza Blink',
+                          '${widget.documentSnapshot.data['last name']} ${widget.documentSnapshot.data['first name']}',
                           style: font30Black,
                         )
                       ],
@@ -56,7 +86,7 @@ class _UserProfileState extends State<UserProfile> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            'Stock Manager',
+                            widget.documentSnapshot.data['role'],
                             style: TextStyle(
                               fontSize: 20.0,
                               color: blackColor,
@@ -75,14 +105,17 @@ class _UserProfileState extends State<UserProfile> {
                               'Phone Number',
                               style: font20Grey,
                             ),
-                            trailing: Text('098 837 493', style: font20Black),
+                            trailing: Text(
+                                widget.documentSnapshot.data['phone number'],
+                                style: font20Black),
                           ),
                           ListTile(
                             title: Text(
                               'Email',
                               style: font20Grey,
                             ),
-                            trailing: Text('lisainthehouse@gmail.com',
+                            trailing: Text(
+                                widget.documentSnapshot.data['email'],
                                 style: font20Black),
                           ),
                           ListTile(
@@ -90,21 +123,31 @@ class _UserProfileState extends State<UserProfile> {
                               'Birthday',
                               style: font20Grey,
                             ),
-                            trailing: Text('09/March/1998', style: font20Black),
+                            trailing: Text(
+                                DateFormat('d MMM y')
+                                    .format(widget
+                                        .documentSnapshot.data['date of birth']
+                                        .toDate())
+                                    .toString(),
+                                style: font20Black),
                           ),
                           ListTile(
                             title: Text(
                               'Place of Birth',
                               style: font20Grey,
                             ),
-                            trailing: Text('Phnom Penh', style: font20Black),
+                            trailing: Text(
+                                widget.documentSnapshot.data['place of birth'],
+                                style: font20Black),
                           ),
                           ListTile(
                             title: Text(
                               'Address',
                               style: font20Grey,
                             ),
-                            trailing: Text('Phnom Penh', style: font20Black),
+                            trailing: Text(
+                                widget.documentSnapshot.data['address'],
+                                style: font20Black),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(20.0),
@@ -117,13 +160,30 @@ class _UserProfileState extends State<UserProfile> {
                                       Radius.circular(8.0),
                                     )),
                                     textColor: Colors.white,
-                                    color: Colors.blue,
+                                    color: Colors.pinkAccent,
                                     padding: const EdgeInsets.all(15.0),
                                     child: new Text(
                                       "Logout",
                                       style: TextStyle(fontSize: 20.0),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      SharedPreferences sharedPreferences =
+                                          await SharedPreferences.getInstance();
+                                      sharedPreferences
+                                          .clear()
+                                          .whenComplete(() {
+                                        Navigator.of(context)
+                                            .pushAndRemoveUntil(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        LoginScreen()),
+                                                (Route<dynamic> route) => false)
+                                            .whenComplete(() {
+                                          Authenticate().signOut();
+                                        });
+                                      });
+                                      // Navigator.pushNamedAndRemoveUntil(context, newRouteName, predicate);
+                                    },
                                   ),
                                 ),
                               ],

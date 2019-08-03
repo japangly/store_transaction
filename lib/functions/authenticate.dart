@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:store_transaction/login_screen.dart';
 
 class Authenticate {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   FirebaseUser user;
+  SharedPreferences sharedPreferences;
 
   Future<String> signIn(
       {@required String email, @required String password}) async {
@@ -26,15 +29,40 @@ class Authenticate {
     return firebaseAuth.signOut();
   }
 
-  Future<bool> changePassword({@required String password}) async {
+  Future<bool> changePassword(
+      {@required String oldPassword,
+      @required String newPassword,
+      @required BuildContext context}) async {
     user = await getCurrentUser();
-
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     try {
-      user.updatePassword(password);
+      FirebaseUser reAuthUser = await firebaseAuth.signInWithEmailAndPassword(
+          email: user.email, password: oldPassword);
+      if (reAuthUser.uid != null) {
+        reAuthUser.updatePassword(newPassword);
+        sharedPreferences.clear().whenComplete(() {
+          Navigator.of(context)
+              .pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                  (Route<dynamic> route) => false)
+              .whenComplete(() {
+            Authenticate().signOut();
+          });
+        });
+      }
       print('Success changed password');
+    } catch (error) {
+      print(error);
+      return false;
+    }
+  }
+
+  Future<bool> resetPassword({@required String email}) async {
+    try {
+      await firebaseAuth.sendPasswordResetEmail(email: email);
       return true;
     } catch (error) {
-      print('error $error');
+      print(error);
       return false;
     }
   }

@@ -23,7 +23,6 @@ class Database {
           .where('uid', isEqualTo: userId)
           .limit(1)
           .getDocuments();
-      print(querySnapshot.documents.first);
       return querySnapshot.documents.first;
     } catch (error) {
       print(error);
@@ -99,6 +98,7 @@ class Database {
       return documentSnapshot;
     } catch (error) {
       print(error);
+      return null;
     }
   }
 
@@ -115,6 +115,24 @@ class Database {
           .getDocuments();
       return snapshot.documents.first;
     } catch (e) {
+      return null;
+    }
+  }
+
+  Future<List<DocumentSnapshot>> getHistoryProduction(
+      {@required String collection,
+      @required String field,
+      @required Timestamp dateTime,
+      @required Timestamp endDate}) async {
+    try {
+      QuerySnapshot snapshot = await Firestore.instance
+          .collection(collection)
+          .where(field, isGreaterThan: dateTime)
+          .where(field, isLessThan: endDate)
+          .getDocuments();
+      return snapshot.documents;
+    } catch (e) {
+      print(e);
       return null;
     }
   }

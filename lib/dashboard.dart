@@ -1,10 +1,17 @@
 import 'package:animated_floatactionbuttons/animated_floatactionbuttons.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:store_transaction/print.dart';
-import 'package:store_transaction/themes/helpers/fonts.dart';
-import 'package:store_transaction/themes/helpers/theme_colors.dart';
-import 'package:store_transaction/user_profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:store_transaction/connect_printer.dart';
+
+import 'functions/firebase_firestore.dart';
+import 'print.dart';
+import 'stock_screen.dart';
+import 'themes/helpers/fonts.dart';
+import 'themes/helpers/theme_colors.dart';
+import 'total_calculate.dart';
+import 'user_profile.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -12,12 +19,74 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  SharedPreferences sharedPreferences;
+
+  Widget sale() {
+    return Container(
+      child: FloatingActionButton(
+        backgroundColor: Colors.lightBlue,
+        onPressed: () async {
+          var employees = await Database().getAllCollection(
+            collection: 'employees',
+            sortBy: 'last name',
+            order: false,
+          );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => ConfirmDeductFromStock(
+                employeesList: employees,
+              ),
+            ),
+          );
+        },
+        heroTag: "s1",
+        tooltip: 'sale',
+        child: Icon(Icons.store),
+      ),
+    );
+  }
+
+  Widget service() {
+    return Container(
+      child: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => ListTotal(),
+            ),
+          );
+        },
+        backgroundColor: Colors.amber,
+        heroTag: "s2",
+        tooltip: 'service',
+        child: Icon(Icons.content_cut),
+      ),
+    );
+  }
+
+  Widget _buildTile(Widget child, {Function() onTap}) {
+    return Material(
+        elevation: 14.0,
+        borderRadius: BorderRadius.circular(12.0),
+        shadowColor: Color(0x802196F3),
+        child: InkWell(
+            // Do onTap() if it isn't null, otherwise do print()
+            onTap: onTap != null
+                ? () => onTap()
+                : () {
+                    print('Not set yet');
+                  },
+            child: child));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 2.0,
-        backgroundColor: blueColor,
+        backgroundColor: Colors.pinkAccent,
         title: Text('Dashboard',
             style: TextStyle(color: Colors.white, fontSize: 30.0)),
         leading: IconButton(
@@ -26,17 +95,39 @@ class _DashboardState extends State<Dashboard> {
             color: Colors.white,
             size: 30.0,
           ),
-          onPressed: () {
+          onPressed: () async {
+            sharedPreferences = await SharedPreferences.getInstance();
+            DocumentSnapshot ducuments = await Database()
+                .getCurrentUserInfo(userId: sharedPreferences.get('keyUserId'));
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return UserProfile();
+                  return UserProfile(documentSnapshot: ducuments);
                 },
               ),
             );
           },
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.settings,
+              color: Colors.white,
+              size: 30.0,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return ConnectPrinterScreen();
+                  },
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: StaggeredGridView.count(
         crossAxisCount: 2,
@@ -44,7 +135,7 @@ class _DashboardState extends State<Dashboard> {
         mainAxisSpacing: 12.0,
         padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         children: <Widget>[
-          todayEarnings(
+          _buildTile(
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Row(
@@ -58,7 +149,7 @@ class _DashboardState extends State<Dashboard> {
                         Text('Today Earnings', style: font25Black),
                         Text('\$2,000',
                             style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.blue,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 50.0))
                       ],
@@ -66,7 +157,7 @@ class _DashboardState extends State<Dashboard> {
                   ]),
             ),
           ),
-          history(
+          _buildTile(
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
@@ -165,21 +256,31 @@ class _DashboardState extends State<Dashboard> {
               ),
             ),
           ),
-          productInUse(
+          _buildTile(
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Text('Products Sold', style: font25Black),
                         Text('2000',
                             style: TextStyle(
-                                color: Colors.white,
+                                color: confirmColor,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 50.0)),
+                        Text('items', style: font25Black),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Products In Use', style: font25Black),
+                        Text('50',
+                            style: TextStyle(
+                                color: pinkColor,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 50.0)),
                         Text('items', style: font25Black),
@@ -188,23 +289,18 @@ class _DashboardState extends State<Dashboard> {
                   ]),
             ),
           ),
-          vipQueue(
+          _buildTile(
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('សម្រាប់ភ្ញៀវពិសេស',
+                    Text('Your waiting number is',
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w700,
                             fontSize: 20.0)),
-                    Text('លេខរង់ចាំរបស់អ្នកគឺ',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 20.0)),
-                    Text('1',
+                    Text('01',
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w700,
@@ -217,18 +313,18 @@ class _DashboardState extends State<Dashboard> {
                   ]),
             ),
           ),
-          normalQueue(
+          _buildTile(
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('លេខរង់ចាំរបស់អ្នកគឺ',
+                    Text('Your waiting number is',
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w700,
                             fontSize: 20.0)),
-                    Text('1',
+                    Text('VIP 01',
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w700,
@@ -260,106 +356,5 @@ class _DashboardState extends State<Dashboard> {
         animatedIconData: AnimatedIcons.menu_close,
       ),
     );
-  }
-
-  Widget sale() {
-    return Container(
-      child: FloatingActionButton(
-        backgroundColor: Colors.lightBlue,
-        onPressed: null,
-        heroTag: "Sale",
-        tooltip: 'Sale',
-        child: Icon(Icons.store),
-      ),
-    );
-  }
-
-  Widget service() {
-    return Container(
-      child: FloatingActionButton(
-        onPressed: null,
-        backgroundColor: Colors.amber,
-        heroTag: "Service",
-        tooltip: 'Service',
-        child: Icon(Icons.content_cut),
-      ),
-    );
-  }
-
-  Widget normalQueue(Widget child, {Function() onTap}) {
-    return Material(
-        elevation: 14.0,
-        borderRadius: BorderRadius.circular(8.0),
-        shadowColor: Color(0x802196F3),
-        child: InkWell(
-            // Do onTap() if it isn't null, otherwise do print()
-            onTap: onTap != null
-                ? () => onTap()
-                : () {
-                    print('Not set yet');
-                  },
-            child: child));
-  }
-
-  Widget productInUse(Widget child, {Function() onTap}) {
-    return Material(
-        color: Colors.orange,
-        elevation: 14.0,
-        borderRadius: BorderRadius.circular(8.0),
-        shadowColor: Color(0x802196F3),
-        child: InkWell(
-            // Do onTap() if it isn't null, otherwise do print()
-            onTap: onTap != null
-                ? () => onTap()
-                : () {
-                    print('Not set yet');
-                  },
-            child: child));
-  }
-
-  Widget vipQueue(Widget child, {Function() onTap}) {
-    return Material(
-        elevation: 14.0,
-        borderRadius: BorderRadius.circular(8.0),
-        shadowColor: Color(0x802196F3),
-        child: InkWell(
-            // Do onTap() if it isn't null, otherwise do print()
-            onTap: onTap != null
-                ? () => onTap()
-                : () {
-                    print('Not set yet');
-                  },
-            child: child));
-  }
-
-  Widget history(Widget child, {Function() onTap}) {
-    return Material(
-        elevation: 14.0,
-        borderRadius: BorderRadius.circular(8.0),
-        shadowColor: Color(0x802196F3),
-        child: InkWell(
-            // Do onTap() if it isn't null, otherwise do print()
-            onTap: onTap != null
-                ? () => onTap()
-                : () {
-                    print('Not set yet');
-                  },
-            child: child));
-  }
-
-  Widget todayEarnings(Widget child, {Function() onTap}) {
-    return Material(
-        color: Colors.lightBlueAccent,
-        elevation: 14.0,
-        borderRadius: BorderRadius.circular(8.0),
-        shadowColor: Color(0x802196F3),
-        child: InkWell(
-            // Do onTap() if it isn't null, otherwise do print()
-            onTap: onTap != null
-                ? () => onTap()
-                : () {
-                    print('Not set yet');
-                  },
-            child: child));
   }
 }

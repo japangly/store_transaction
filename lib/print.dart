@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_icons/simple_line_icons.dart';
-import 'package:store_transaction/themes/helpers/buttons.dart';
-import 'package:store_transaction/themes/helpers/fonts.dart';
+
 import 'dialog/print_dialog.dart';
+import 'themes/helpers/buttons.dart';
+import 'themes/helpers/fonts.dart';
 import 'themes/helpers/theme_colors.dart';
 
 class PrintScreen extends StatefulWidget {
@@ -12,11 +13,14 @@ class PrintScreen extends StatefulWidget {
 }
 
 class _PrintScreenState extends State<PrintScreen> {
+  DateTime _startDate;
+  DateTime _endDate;
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.pinkAccent,
           centerTitle: true,
           title: Column(
             children: <Widget>[
@@ -39,7 +43,7 @@ class _PrintScreenState extends State<PrintScreen> {
                   Icon(
                     SimpleLineIcons.getIconData("printer"),
                     color: Colors.blue,
-                    size: 60.0,
+                    size: 100.0,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
@@ -58,15 +62,25 @@ class _PrintScreenState extends State<PrintScreen> {
                             DatePicker.showDatePicker(context,
                                 showTitleActions: true,
                                 minTime: DateTime(2019, 1, 1),
-                                onChanged: (date) {
-                              print('change $date');
-                            }, onConfirm: (date) {
-                              print('confirm $date');
+                                onChanged: (date) {}, onConfirm: (date) {
+                              setState(() {
+                                _startDate = DateTime.utc(
+                                  date.year,
+                                  date.month,
+                                  date.day,
+                                );
+                                _endDate = DateTime.utc(
+                                  date.year,
+                                  date.month,
+                                  date.day + 1,
+                                );
+                              });
                               showDialog(
                                   context: context,
                                   builder: (_) {
                                     return PrintDialog(
-                                      selectedDay: date,
+                                      setDate: _startDate,
+                                      endDate: _endDate,
                                     );
                                   });
                             },
@@ -77,15 +91,23 @@ class _PrintScreenState extends State<PrintScreen> {
                           colorButton: cancelColor,
                         ),
                         SizedBox(
-                          width: 10,
+                          width: 20,
                         ),
                         CustomButton(
                           onPressed: () {
+                            setState(() {
+                              _startDate = DateTime.utc(
+                                DateTime.now().year,
+                                DateTime.now().month,
+                                DateTime.now().day,
+                              );
+                            });
                             showDialog(
                                 context: context,
                                 builder: (_) {
                                   return PrintDialog(
-                                    selectedDay: DateTime.now(),
+                                    setDate: _startDate,
+                                    endDate: DateTime.now(),
                                   );
                                 });
                           },
