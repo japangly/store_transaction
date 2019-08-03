@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:store_transaction/connect_printer.dart';
 
 import 'functions/firebase_firestore.dart';
 import 'print.dart';
@@ -108,6 +109,25 @@ class _DashboardState extends State<Dashboard> {
             );
           },
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.settings,
+              color: Colors.white,
+              size: 30.0,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return ConnectPrinterScreen();
+                  },
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: StaggeredGridView.count(
         crossAxisCount: 2,

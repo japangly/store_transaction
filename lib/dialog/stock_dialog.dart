@@ -44,6 +44,12 @@ class StockDialog extends StatelessWidget {
                         ],
                       ),
                     ),
+                    new Container(
+                        margin: const EdgeInsets.only(left: 10.0, right: 20.0),
+                        child: Divider(
+                          color: Colors.black,
+                          height: 36,
+                        )),
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Column(

@@ -62,8 +62,7 @@ class _PrintScreenState extends State<PrintScreen> {
                             DatePicker.showDatePicker(context,
                                 showTitleActions: true,
                                 minTime: DateTime(2019, 1, 1),
-                                onChanged: (date) {
-                            }, onConfirm: (date) {
+                                onChanged: (date) {}, onConfirm: (date) {
                               setState(() {
                                 _startDate = DateTime.utc(
                                   date.year,

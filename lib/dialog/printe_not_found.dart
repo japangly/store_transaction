@@ -1,35 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:store_transaction/themes/helpers/fonts.dart';
+import 'package:store_transaction/themes/helpers/theme_colors.dart';
 
-import 'env.dart';
-import 'themes/helpers/fonts.dart';
-import 'themes/helpers/theme_colors.dart';
+import '../env.dart';
 
-void main() => runApp(MaterialApp(home: Home()));
-
-class Home extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-            child: RaisedButton(
-      child: Text('Open Dialog'),
-      onPressed: () {
-        showDialog(
-            context: context,
-            builder: (_) {
-              return MyDialog();
-            });
-      },
-    )));
-  }
-}
-
-class MyDialog extends StatefulWidget {
-  @override
-  _MyDialogState createState() => _MyDialogState();
-}
-
-class _MyDialogState extends State<MyDialog> {
+class PrinterNotFoundDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
