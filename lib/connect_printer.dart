@@ -45,7 +45,6 @@ class _ConnectPrinterScreenState extends State<ConnectPrinterScreen> {
                     Expanded(
                       flex: 5,
                       child: TextFormField(
-                        obscureText: true,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           labelText: 'Input printer address',

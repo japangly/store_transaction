@@ -44,6 +44,12 @@ class ReceiptDialog extends StatelessWidget {
                         ],
                       ),
                     ),
+                    new Container(
+                        margin: const EdgeInsets.only(left: 10.0, right: 20.0),
+                        child: Divider(
+                          color: Colors.black,
+                          height: 36,
+                        )),
                     Column(
                       children: <Widget>[
                         Table(
