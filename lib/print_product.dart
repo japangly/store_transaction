@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_icons/simple_line_icons.dart';
 
-import 'dialog/print_dialog.dart';
+import 'dialog/print_product_dialog.dart';
 import 'themes/helpers/buttons.dart';
 import 'themes/helpers/fonts.dart';
 import 'themes/helpers/theme_colors.dart';
 
-class PrintScreen extends StatefulWidget {
+class PrintProductScreen extends StatefulWidget {
   @override
-  _PrintScreenState createState() => _PrintScreenState();
+  _PrintProductScreenState createState() => _PrintProductScreenState();
 }
 
-class _PrintScreenState extends State<PrintScreen> {
+class _PrintProductScreenState extends State<PrintProductScreen> {
   DateTime _startDate;
   DateTime _endDate;
   @override
@@ -27,7 +27,7 @@ class _PrintScreenState extends State<PrintScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: 15.0),
                 child: Text(
-                  'Print Report',
+                  'Product Report',
                   style: font20White,
                 ),
               ),
@@ -78,7 +78,7 @@ class _PrintScreenState extends State<PrintScreen> {
                               showDialog(
                                   context: context,
                                   builder: (_) {
-                                    return PrintDialog(
+                                    return PrintProductDialog(
                                       setDate: _startDate,
                                       endDate: _endDate,
                                     );
@@ -105,7 +105,7 @@ class _PrintScreenState extends State<PrintScreen> {
                             showDialog(
                                 context: context,
                                 builder: (_) {
-                                  return PrintDialog(
+                                  return PrintProductDialog(
                                     setDate: _startDate,
                                     endDate: DateTime.now(),
                                   );

@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:flutter_icons/simple_line_icons.dart';
 
-import 'dialog/print_dialog.dart';
-import 'themes/helpers/buttons.dart';
 import 'themes/helpers/fonts.dart';
-import 'themes/helpers/theme_colors.dart';
 
 class ConnectPrinterScreen extends StatefulWidget {
   @override

@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:store_transaction/connect_printer.dart';
+import 'package:store_transaction/print_product.dart';
+import 'package:store_transaction/print_service.dart';
 
 import 'functions/firebase_firestore.dart';
-import 'print.dart';
 import 'stock_screen.dart';
 import 'themes/helpers/fonts.dart';
 import 'themes/helpers/theme_colors.dart';
@@ -130,7 +131,7 @@ class _DashboardState extends State<Dashboard> {
         ],
       ),
       body: StaggeredGridView.count(
-        crossAxisCount: 2,
+        crossAxisCount: 3,
         crossAxisSpacing: 12.0,
         mainAxisSpacing: 12.0,
         padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -160,6 +161,48 @@ class _DashboardState extends State<Dashboard> {
           _buildTile(
             Padding(
               padding: const EdgeInsets.all(24.0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Products Sold', style: font25Black),
+                        Text('2000',
+                            style: TextStyle(
+                                color: confirmColor,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 50.0)),
+                        Text('items', style: font25Black),
+                      ],
+                    ),
+                  ]),
+            ),
+          ),
+          _buildTile(
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Products In Use', style: font25Black),
+                        Text('50',
+                            style: TextStyle(
+                                color: pinkColor,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 50.0)),
+                        Text('items', style: font25Black),
+                      ],
+                    ),
+                  ]),
+            ),
+          ),
+          _buildTile(
+            Padding(
+              padding: const EdgeInsets.all(24.0),
               child: Column(
                 children: <Widget>[
                   Expanded(
@@ -174,7 +217,7 @@ class _DashboardState extends State<Dashboard> {
                                 padding: const EdgeInsets.only(left: 20.0),
                                 child: Row(
                                   children: <Widget>[
-                                    Text('History',
+                                    Text('Product',
                                         style: TextStyle(
                                             color: Colors.blue[500],
                                             fontSize: 25.0)),
@@ -189,7 +232,7 @@ class _DashboardState extends State<Dashboard> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (BuildContext context) {
-                                            return PrintScreen();
+                                            return PrintProductScreen();
                                           },
                                         ),
                                       );
@@ -237,6 +280,72 @@ class _DashboardState extends State<Dashboard> {
                             ),
                             trailing: Text('\$0.0', style: font20Black),
                           ),
+                        ],
+                      )
+                    ]),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          _buildTile(
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(left: 20.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Text('Service',
+                                        style: TextStyle(
+                                            color: Colors.blue[500],
+                                            fontSize: 25.0)),
+                                  ],
+                                ),
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  new RawMaterialButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (BuildContext context) {
+                                            return PrintServiceScreen();
+                                          },
+                                        ),
+                                      );
+                                    },
+                                    child: new Icon(
+                                      Icons.print,
+                                      color: Colors.white,
+                                      size: 35.0,
+                                    ),
+                                    shape: new CircleBorder(),
+                                    elevation: 2.0,
+                                    fillColor: Colors.blue,
+                                    padding: const EdgeInsets.all(15.0),
+                                  ),
+                                ],
+                              ),
+                            ]),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: ListView(children: <Widget>[
+                      Column(
+                        children: <Widget>[
                           ListTile(
                             title: Text(
                               'Nail Cut',
@@ -259,33 +368,24 @@ class _DashboardState extends State<Dashboard> {
           _buildTile(
             Padding(
               padding: const EdgeInsets.all(24.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text('Products Sold', style: font25Black),
-                        Text('2000',
-                            style: TextStyle(
-                                color: confirmColor,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 50.0)),
-                        Text('items', style: font25Black),
-                      ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text('Products In Use', style: font25Black),
-                        Text('50',
-                            style: TextStyle(
-                                color: pinkColor,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 50.0)),
-                        Text('items', style: font25Black),
-                      ],
-                    ),
+                    Text('Your waiting number is',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 20.0)),
+                    Text('VIP 01',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 80.0)),
+                    Text('27/09/2019',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 20.0)),
                   ]),
             ),
           ),
@@ -313,37 +413,15 @@ class _DashboardState extends State<Dashboard> {
                   ]),
             ),
           ),
-          _buildTile(
-            Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('Your waiting number is',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 20.0)),
-                    Text('VIP 01',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 80.0)),
-                    Text('27/09/2019',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 20.0)),
-                  ]),
-            ),
-          ),
         ],
         staggeredTiles: [
           StaggeredTile.extent(1, 200.0),
-          StaggeredTile.extent(1, 410.0),
           StaggeredTile.extent(1, 200.0),
-          StaggeredTile.extent(1, 250.0),
-          StaggeredTile.extent(1, 250.0),
+          StaggeredTile.extent(1, 200.0),
+          StaggeredTile.extent(1, 450.0),
+          StaggeredTile.extent(1, 450.0),
+          StaggeredTile.extent(1, 219.0),
+          StaggeredTile.extent(1, 219.0),
         ],
       ),
       floatingActionButton: AnimatedFloatingActionButton(
