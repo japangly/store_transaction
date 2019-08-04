@@ -1,3 +1,4 @@
+import 'package:animated_floatactionbuttons/animated_floatactionbuttons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -8,6 +9,7 @@ import 'add_service_screen.dart';
 import 'dialog/receipt_dialog.dart';
 import 'functions/database.dart';
 import 'helper/search_library.dart';
+import 'item_sale.dart';
 import 'sale_card.dart';
 import 'themes/helpers/theme_colors.dart';
 
@@ -98,7 +100,7 @@ class _ListTotalState extends State<ListTotal> {
         centerTitle: true,
         backgroundColor: pinkColor,
         title: AutoSizeText(
-          'List Calculate Money',
+          'Sale and Service',
           minFontSize: 30.0,
         ),
         actions: <Widget>[
@@ -176,57 +178,70 @@ class _ListTotalState extends State<ListTotal> {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: FloatingActionButton(
-              backgroundColor: pinkColor,
-              heroTag: 's1',
-              elevation: 5.0,
-              onPressed: () async {
-                List<DocumentSnapshot> servicesDocument = await Database()
-                    .getAllCollection(
-                        collection: 'services', order: false, sortBy: 'name');
-                List<DocumentSnapshot> employeesDocument =
-                    await Database().getAllCollection(
-                  collection: 'employees',
-                  order: false,
-                  sortBy: 'role',
-                );
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => AddService(),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(right: 12.0),
+                child: FloatingActionButton(
+                  backgroundColor: pinkColor,
+                  heroTag: 's1',
+                  elevation: 5.0,
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (_) {
+                          return ReceiptDialog();
+                        });
+                  },
+                  child: Icon(
+                    Icons.print,
+                    size: 24.0,
                   ),
-                );
-                // showDialog(
-                //     context: context,
-                //     builder: (_) {
-                //       return AddServices(
-                //           documentService: servicesDocument,
-                //           documentEmployees: employeesDocument);
-                //     });
-              },
-              child: Icon(
-                Icons.add,
-                size: 24.0,
+                ),
               ),
-            ),
+            ],
           ),
-          FloatingActionButton(
-            backgroundColor: pinkColor,
-            heroTag: 's2',
-            elevation: 5.0,
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (_) {
-                    return ReceiptDialog();
-                  });
-            },
-            child: Icon(
-              Icons.print,
-              size: 24.0,
-            ),
+          AnimatedFloatingActionButton(
+            fabButtons: <Widget>[
+              FloatingActionButton(
+                backgroundColor: pinkColor,
+                heroTag: 's2',
+                elevation: 5.0,
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => AddService(),
+                    ),
+                  );
+                },
+                child: Icon(
+                  Icons.content_cut,
+                  size: 24.0,
+                ),
+              ),
+              FloatingActionButton(
+                backgroundColor: pinkColor,
+                heroTag: 's3',
+                elevation: 5.0,
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => GridProductSale(),
+                    ),
+                  );
+                },
+                child: Icon(
+                  Icons.add_shopping_cart,
+                  size: 24.0,
+                ),
+              ),
+            ],
+            colorStartAnimation: confirmColor,
+            colorEndAnimation: removeColor,
+            animatedIconData: AnimatedIcons.menu_close,
           ),
         ],
       ),

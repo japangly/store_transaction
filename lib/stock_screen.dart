@@ -6,6 +6,8 @@ import 'dialog/stock_dialog.dart';
 import 'env.dart';
 import 'functions/database.dart';
 import 'helper/counter.dart';
+import 'item_instock.dart';
+import 'item_sale.dart';
 import 'sale_card.dart';
 import 'themes/helpers/theme_colors.dart';
 
@@ -31,7 +33,7 @@ class _ConfirmDeductFromStockState extends State<ConfirmDeductFromStock> {
         backgroundColor: pinkColor,
         centerTitle: true,
         title: AutoSizeText(
-          'List Stock',
+          'Stock Deduted',
           minFontSize: 30.0,
         ),
       ),
@@ -98,20 +100,45 @@ class _ConfirmDeductFromStockState extends State<ConfirmDeductFromStock> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: pinkColor,
-        elevation: 5.0,
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (_) {
-                return StockDialog();
-              });
-        },
-        child: Icon(
-          Icons.print,
-          size: 24.0,
-        ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: FloatingActionButton(
+              backgroundColor: pinkColor,
+              heroTag: 's3',
+              elevation: 5.0,
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => GridProductInstock(),
+                  ),
+                );
+              },
+              child: Icon(
+                Icons.add,
+                size: 24.0,
+              ),
+            ),
+          ),
+          FloatingActionButton(
+            backgroundColor: pinkColor,
+            elevation: 5.0,
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (_) {
+                    return StockDialog();
+                  });
+            },
+            child: Icon(
+              Icons.print,
+              size: 24.0,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -35,7 +35,7 @@ class _AddServiceState extends State<AddService> {
         centerTitle: true,
         backgroundColor: pinkColor,
         title: AutoSizeText(
-          'List Calculate Money',
+          'Service',
           minFontSize: 30.0,
         ),
       ),
