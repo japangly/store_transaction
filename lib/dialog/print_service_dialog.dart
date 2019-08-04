@@ -20,8 +20,8 @@ const String htmlPaperTitle =
 const String htmlTableTitle =
     '<tr> <th>No.</th> <th>Product</th> <th>Category</th> <th>Quantity</th> <th>Description</th> <th>Employee</th> </tr>';
 
-class PrintDialog extends StatelessWidget {
-  const PrintDialog({
+class PrintServiceDialog extends StatelessWidget {
+  const PrintServiceDialog({
     Key key,
     @required this.setDate,
     @required this.endDate,
