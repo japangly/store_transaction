@@ -30,8 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Text('$index'),
                 ),
               )),
-          staggeredTileBuilder: (int index) =>
-              StaggeredTile.count(2, index.isEven ? 2 : 1),
+          staggeredTileBuilder: (int index) {
+            return StaggeredTile.count(2, index.isEven ? 2 : 1);
+          },
           mainAxisSpacing: 4.0,
           crossAxisSpacing: 4.0,
         ),

@@ -42,7 +42,6 @@ class _AddServicesState extends State<AddServices> {
     super.initState();
 
     for (int service = 0; service < widget.documentService.length; service++) {
-
       setState(() {
         String servicename = widget.documentService[service].data['name'];
         _listService.add(servicename);
@@ -88,10 +87,7 @@ class _AddServicesState extends State<AddServices> {
         }
       }
       setState(() {
-        addService.add(ServicePriceCard(
-          documentService: _documentService,
-          documentEmployee: _documentEmployee,
-        ));
+        addService.add(ServicePriceCard());
         // ListTotal();
         Navigator.of(context, rootNavigator: true).pop('');
       });

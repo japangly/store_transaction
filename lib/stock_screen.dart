@@ -1,15 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:store_transaction/service_card.dart';
+import 'package:recase/recase.dart';
 
-import 'dialog/stock_dialog.dart';
 import 'env.dart';
-import 'functions/database.dart';
 import 'helper/counter.dart';
 import 'item_instock.dart';
-import 'item_sale.dart';
-import 'sale_card.dart';
 import 'themes/helpers/theme_colors.dart';
 
 int _defaultValue = 1;
@@ -24,10 +20,6 @@ class ConfirmDeductFromStock extends StatefulWidget {
 }
 
 class _ConfirmDeductFromStockState extends State<ConfirmDeductFromStock> {
-  List<Widget> cardItem = [];
-  List<String> employeesName = [];
-  TextEditingController _barcode = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +27,7 @@ class _ConfirmDeductFromStockState extends State<ConfirmDeductFromStock> {
         backgroundColor: pinkColor,
         centerTitle: true,
         title: AutoSizeText(
-          'Stock Deduted',
+          ReCase('stock deduted').titleCase,
           minFontSize: 30.0,
         ),
       ),
@@ -50,6 +42,8 @@ class _ConfirmDeductFromStockState extends State<ConfirmDeductFromStock> {
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 children: <Widget>[
+                  DeductStockCard(),
+                  DeductStockCard(),
                   DeductStockCard(),
                 ],
               ),
@@ -83,12 +77,14 @@ class _ConfirmDeductFromStockState extends State<ConfirmDeductFromStock> {
           FloatingActionButton(
             backgroundColor: pinkColor,
             elevation: 5.0,
+            heroTag: 's4',
             onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (_) {
-                    return StockDialog();
-                  });
+              // showDialog(
+              //   context: context,
+              //   builder: (_) {
+              //     return StockDialog();
+              //   },
+              // );
             },
             child: Icon(
               Icons.print,
@@ -172,7 +168,7 @@ class _DeductStockCardState extends State<DeductStockCard> {
                         ),
                       ),
                       AutoSizeText(
-                        'By',
+                        'by'.toUpperCase(),
                         minFontSize: 24.0,
                         maxFontSize: 256.0,
                         style: TextStyle(color: Colors.black),
@@ -248,7 +244,7 @@ class _DeductStockCardState extends State<DeductStockCard> {
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: AutoSizeText(
-                        'Delete',
+                        ReCase('delete').titleCase,
                         minFontSize: 24.0,
                         maxFontSize: 256.0,
                         style: TextStyle(color: Colors.white),

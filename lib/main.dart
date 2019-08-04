@@ -15,7 +15,7 @@ void main() async {
     (_) {
       runApp(
         MaterialApp(
-          title: 'Material App',
+          title: 'store_transaction',
           home: SplashScreen(),
         ),
       );

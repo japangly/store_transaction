@@ -7,11 +7,9 @@ import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
 import 'package:recase/recase.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'connect_printer.dart';
 import 'dialog/printe_not_found.dart';
-import 'functions/database.dart';
 import 'print_product.dart';
 import 'print_service.dart';
 import 'stock_screen.dart';
@@ -28,7 +26,6 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   String bluetoothAddress;
   BluetoothConnection connection;
-  SharedPreferences sharedPreferences;
   int waitingSimpleNumber = 0;
   int waitingVIPNumber = 0;
 
@@ -44,16 +41,16 @@ class _DashboardState extends State<Dashboard> {
     DateTime.fromMicrosecondsSinceEpoch(0).day,
   );
 
-  @override
-  void dispose() {
-    // Avoid memory leak (`setState` after dispose) and disconnect
-    if (isConnected) {
-      connection.dispose();
-      connection = null;
-      print('we are disconnecting locally!');
-    }
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // Avoid memory leak (`setState` after dispose) and disconnect
+  //   if (isConnected) {
+  //     connection.dispose();
+  //     connection = null;
+  //     print('we are disconnecting locally!');
+  //   }
+  //   super.dispose();
+  // }
 
   @override
   void initState() {
@@ -68,6 +65,12 @@ class _DashboardState extends State<Dashboard> {
     // } on PlatformException catch (e) {
     //   // PlatformException to be handled
     //   print(e);
+    //   showDialog(
+    //     context: context,
+    //     builder: (_) {
+    //       return PrinterNotFoundDialog();
+    //     },
+    //   );
     // }
   }
 
