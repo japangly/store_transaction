@@ -5,9 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:recase/recase.dart';
+import 'package:store_transaction/functions/database.dart';
 
 import '../env.dart';
-import '../functions/firebase_firestore.dart';
 import '../themes/helpers/buttons.dart';
 import '../themes/helpers/theme_colors.dart';
 
@@ -26,8 +26,10 @@ class PrintServiceDialog extends StatelessWidget {
     @required this.setDate,
     @required this.endDate,
   }) : super(key: key);
-  final DateTime setDate;
+
   final DateTime endDate;
+  final DateTime setDate;
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(

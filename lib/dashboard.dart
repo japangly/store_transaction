@@ -1,13 +1,19 @@
+import 'dart:convert';
+
 import 'package:animated_floatactionbuttons/animated_floatactionbuttons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:intl/intl.dart';
+import 'package:recase/recase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:store_transaction/connect_printer.dart';
-import 'package:store_transaction/print_product.dart';
-import 'package:store_transaction/print_service.dart';
 
-import 'functions/firebase_firestore.dart';
+import 'connect_printer.dart';
+import 'dialog/printe_not_found.dart';
+import 'functions/database.dart';
+import 'print_product.dart';
+import 'print_service.dart';
 import 'stock_screen.dart';
 import 'themes/helpers/fonts.dart';
 import 'themes/helpers/theme_colors.dart';
@@ -20,28 +26,83 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  String bluetoothAddress;
+  BluetoothConnection connection;
   SharedPreferences sharedPreferences;
+  int waitingSimpleNumber = 0;
+  int waitingVIPNumber = 0;
+
+  DateTime _endDate = DateTime.utc(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day + 1,
+  );
+
+  DateTime _startDate = DateTime.utc(
+    DateTime.fromMicrosecondsSinceEpoch(0).year,
+    DateTime.fromMicrosecondsSinceEpoch(0).month,
+    DateTime.fromMicrosecondsSinceEpoch(0).day,
+  );
+
+  @override
+  void dispose() {
+    // Avoid memory leak (`setState` after dispose) and disconnect
+    if (isConnected) {
+      connection.dispose();
+      connection = null;
+      print('we are disconnecting locally!');
+    }
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // try {
+    //   BluetoothConnection.toAddress('DC:0D:30:75:B3:C4').then(
+    //     (_connection) {
+    //       print('Connected to the device');
+    //       connection = _connection;
+    //     },
+    //   );
+    // } on PlatformException catch (e) {
+    //   // PlatformException to be handled
+    //   print(e);
+    // }
+  }
+
+  bool get isConnected {
+    return connection != null && connection.isConnected;
+  }
+
+  _sendMessage(String templateString) async {
+    connection.output.add(
+      utf8.encode(templateString),
+    );
+  }
+
+  String waitingNumberFormatter(int number) {
+    String prefixNum = '';
+    int prefixAmount = 7 - number.toString().length;
+    for (var i = 0; i < prefixAmount; i++) {
+      prefixNum += '0';
+    }
+    return prefixNum + number.toString();
+  }
 
   Widget sale() {
     return Container(
       child: FloatingActionButton(
         backgroundColor: Colors.lightBlue,
-        onPressed: () async {
-          var employees = await Database().getAllCollection(
-            collection: 'employees',
-            sortBy: 'last name',
-            order: false,
-          );
+        onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => ConfirmDeductFromStock(
-                employeesList: employees,
-              ),
+              builder: (BuildContext context) => ConfirmDeductFromStock(),
             ),
           );
         },
-        heroTag: "s1",
+        heroTag: 's1',
         tooltip: 'sale',
         child: Icon(Icons.store),
       ),
@@ -60,7 +121,7 @@ class _DashboardState extends State<Dashboard> {
           );
         },
         backgroundColor: Colors.amber,
-        heroTag: "s2",
+        heroTag: 's2',
         tooltip: 'service',
         child: Icon(Icons.content_cut),
       ),
@@ -69,17 +130,19 @@ class _DashboardState extends State<Dashboard> {
 
   Widget _buildTile(Widget child, {Function() onTap}) {
     return Material(
-        elevation: 14.0,
-        borderRadius: BorderRadius.circular(12.0),
-        shadowColor: Color(0x802196F3),
-        child: InkWell(
-            // Do onTap() if it isn't null, otherwise do print()
-            onTap: onTap != null
-                ? () => onTap()
-                : () {
-                    print('Not set yet');
-                  },
-            child: child));
+      elevation: 14.0,
+      borderRadius: BorderRadius.circular(12.0),
+      shadowColor: Color(0x802196F3),
+      child: InkWell(
+        // Do onTap() if it isn't null, otherwise do print()
+        onTap: onTap != null
+            ? () => onTap()
+            : () {
+                print('Not set yet');
+              },
+        child: child,
+      ),
+    );
   }
 
   @override
@@ -88,7 +151,7 @@ class _DashboardState extends State<Dashboard> {
       appBar: AppBar(
         elevation: 2.0,
         backgroundColor: Colors.pinkAccent,
-        title: Text('Dashboard',
+        title: Text(ReCase('dashboard').titleCase,
             style: TextStyle(color: Colors.white, fontSize: 30.0)),
         leading: IconButton(
           icon: Icon(
@@ -96,15 +159,12 @@ class _DashboardState extends State<Dashboard> {
             color: Colors.white,
             size: 30.0,
           ),
-          onPressed: () async {
-            sharedPreferences = await SharedPreferences.getInstance();
-            DocumentSnapshot ducuments = await Database()
-                .getCurrentUserInfo(userId: sharedPreferences.get('keyUserId'));
+          onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return UserProfile(documentSnapshot: ducuments);
+                  return UserProfile();
                 },
               ),
             );
@@ -140,64 +200,161 @@ class _DashboardState extends State<Dashboard> {
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text('Today Earnings', style: font25Black),
-                        Text('\$2,000',
-                            style: TextStyle(
-                                color: Colors.blue,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 50.0))
-                      ],
-                    ),
-                  ]),
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        ReCase('today earnings').titleCase,
+                        style: font25Black,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: Firestore.instance
+                              .collection('income')
+                              .where('date', isGreaterThanOrEqualTo: _startDate)
+                              .where('date', isLessThanOrEqualTo: _endDate)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError)
+                              return Text('Error: ${snapshot.error}');
+                            switch (snapshot.connectionState) {
+                              case ConnectionState.waiting:
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              default:
+                                return Text(
+                                  'USD ' +
+                                      ' ' +
+                                      snapshot
+                                          .data.documents.first.data['amount']
+                                          .toString(),
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 50.0,
+                                  ),
+                                );
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
           _buildTile(
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text('Products Sold', style: font25Black),
-                        Text('2000',
-                            style: TextStyle(
-                                color: confirmColor,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 50.0)),
-                        Text('items', style: font25Black),
-                      ],
-                    ),
-                  ]),
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        ReCase('products sold').titleCase,
+                        style: font25Black,
+                      ),
+                      StreamBuilder<QuerySnapshot>(
+                        stream: Firestore.instance
+                            .collection('products')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError)
+                            return Text('Error: ${snapshot.error}');
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.waiting:
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            default:
+                              int soldNum = 0;
+                              for (var i = 0;
+                                  i < snapshot.data.documents.length;
+                                  i++) {
+                                soldNum +=
+                                    snapshot.data.documents[i]['sold_out'];
+                              }
+                              return Text(
+                                soldNum.toString(),
+                                style: TextStyle(
+                                  color: confirmColor,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 50.0,
+                                ),
+                              );
+                          }
+                        },
+                      ),
+                      Text(
+                        'items',
+                        style: font25Black,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
           _buildTile(
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text('Products In Use', style: font25Black),
-                        Text('50',
-                            style: TextStyle(
-                                color: pinkColor,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 50.0)),
-                        Text('items', style: font25Black),
-                      ],
-                    ),
-                  ]),
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        ReCase('products in use').titleCase,
+                        style: font25Black,
+                      ),
+                      StreamBuilder<QuerySnapshot>(
+                        stream: Firestore.instance
+                            .collection('products')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError)
+                            return Text('Error: ${snapshot.error}');
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.waiting:
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            default:
+                              int useNum = 0;
+                              for (var i = 0;
+                                  i < snapshot.data.documents.length;
+                                  i++) {
+                                useNum += snapshot.data.documents[i]['in_use'];
+                              }
+                              return Text(
+                                useNum.toString(),
+                                style: TextStyle(
+                                  color: pinkColor,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 50.0,
+                                ),
+                              );
+                          }
+                        },
+                      ),
+                      Text(
+                        'items',
+                        style: font25Black,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
           _buildTile(
@@ -217,16 +374,19 @@ class _DashboardState extends State<Dashboard> {
                                 padding: const EdgeInsets.only(left: 20.0),
                                 child: Row(
                                   children: <Widget>[
-                                    Text('Product',
-                                        style: TextStyle(
-                                            color: Colors.blue[500],
-                                            fontSize: 25.0)),
+                                    Text(
+                                      ReCase('product').titleCase,
+                                      style: TextStyle(
+                                        color: Colors.blue[500],
+                                        fontSize: 25.0,
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
                               Row(
                                 children: <Widget>[
-                                  new RawMaterialButton(
+                                  RawMaterialButton(
                                     onPressed: () {
                                       Navigator.push(
                                         context,
@@ -237,12 +397,12 @@ class _DashboardState extends State<Dashboard> {
                                         ),
                                       );
                                     },
-                                    child: new Icon(
+                                    child: Icon(
                                       Icons.print,
                                       color: Colors.white,
                                       size: 35.0,
                                     ),
-                                    shape: new CircleBorder(),
+                                    shape: CircleBorder(),
                                     elevation: 2.0,
                                     fillColor: Colors.blue,
                                     padding: const EdgeInsets.all(15.0),
@@ -255,34 +415,59 @@ class _DashboardState extends State<Dashboard> {
                   ),
                   Expanded(
                     flex: 3,
-                    child: ListView(children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          ListTile(
-                            title: Text(
-                              'Shampoo',
-                              style: font20Black,
-                            ),
-                            subtitle: Text(
-                              'sold: 20',
-                              style: font15Grey,
-                            ),
-                            trailing: Text('\$200.0', style: font20Black),
-                          ),
-                          ListTile(
-                            title: Text(
-                              'Shampoo',
-                              style: font20Black,
-                            ),
-                            subtitle: Text(
-                              'used: 20',
-                              style: font15Grey,
-                            ),
-                            trailing: Text('\$0.0', style: font20Black),
-                          ),
-                        ],
-                      )
-                    ]),
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: Firestore.instance
+                          .collection('product_history')
+                          .where('action', isEqualTo: 'sold')
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.hasError)
+                          return Text('Error: ${snapshot.error}');
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          default:
+                            return snapshot.data.documents.length == 0
+                                ? Center(
+                                    child: Text(
+                                      ReCase('no recent history.').sentenceCase,
+                                    ),
+                                  )
+                                : ListView(
+                                    children: snapshot.data.documents
+                                        .map((DocumentSnapshot document) {
+                                      return ListTile(
+                                        title: Text(
+                                          ReCase(
+                                            document['name'],
+                                          ).titleCase,
+                                          style: font20Black,
+                                        ),
+                                        subtitle: Text(
+                                          'sold:' +
+                                              ' ' +
+                                              ReCase(
+                                                document['quantity'].toString(),
+                                              ).titleCase,
+                                          style: font15Grey,
+                                        ),
+                                        trailing: Text(
+                                          'USD' +
+                                              ' ' +
+                                              (document['quantity'] *
+                                                      document['price'])
+                                                  .toString(),
+                                          style: font20Black,
+                                        ),
+                                      );
+                                    }).toList(),
+                                  );
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -298,68 +483,107 @@ class _DashboardState extends State<Dashboard> {
                     child: Column(
                       children: <Widget>[
                         Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(left: 20.0),
-                                child: Row(
-                                  children: <Widget>[
-                                    Text('Service',
-                                        style: TextStyle(
-                                            color: Colors.blue[500],
-                                            fontSize: 25.0)),
-                                  ],
-                                ),
-                              ),
-                              Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(left: 20.0),
+                              child: Row(
                                 children: <Widget>[
-                                  new RawMaterialButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) {
-                                            return PrintServiceScreen();
-                                          },
-                                        ),
-                                      );
-                                    },
-                                    child: new Icon(
-                                      Icons.print,
-                                      color: Colors.white,
-                                      size: 35.0,
+                                  Text(
+                                    ReCase('service').titleCase,
+                                    style: TextStyle(
+                                      color: Colors.blue[500],
+                                      fontSize: 25.0,
                                     ),
-                                    shape: new CircleBorder(),
-                                    elevation: 2.0,
-                                    fillColor: Colors.blue,
-                                    padding: const EdgeInsets.all(15.0),
                                   ),
                                 ],
                               ),
-                            ]),
+                            ),
+                            Row(
+                              children: <Widget>[
+                                RawMaterialButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) {
+                                          return PrintServiceScreen();
+                                        },
+                                      ),
+                                    );
+                                  },
+                                  child: Icon(
+                                    Icons.print,
+                                    color: Colors.white,
+                                    size: 35.0,
+                                  ),
+                                  shape: CircleBorder(),
+                                  elevation: 2.0,
+                                  fillColor: Colors.blue,
+                                  padding: const EdgeInsets.all(15.0),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
                   Expanded(
                     flex: 3,
-                    child: ListView(children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          ListTile(
-                            title: Text(
-                              'Nail Cut',
-                              style: font20Black,
-                            ),
-                            subtitle: Text(
-                              'qty: 1',
-                              style: font15Grey,
-                            ),
-                            trailing: Text('\$10.0', style: font20Black),
-                          ),
-                        ],
-                      )
-                    ]),
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: Firestore.instance
+                          .collection('service_history')
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.hasError)
+                          return Text('Error: ${snapshot.error}');
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          default:
+                            return snapshot.data.documents.length == 0
+                                ? Center(
+                                    child: Text(
+                                      ReCase('no recent history.').sentenceCase,
+                                    ),
+                                  )
+                                : ListView(
+                                    children: snapshot.data.documents
+                                        .map((DocumentSnapshot document) {
+                                      return ListTile(
+                                        title: Text(
+                                          ReCase(
+                                            document['name'],
+                                          ).titleCase,
+                                          style: font20Black,
+                                        ),
+                                        subtitle: Text(
+                                          'QTY:' +
+                                              ' ' +
+                                              ReCase(
+                                                document['quantity'].toString(),
+                                              ).titleCase,
+                                          style: font15Grey,
+                                        ),
+                                        trailing: Text(
+                                          'USD' +
+                                              ' ' +
+                                              (document['quantity'] *
+                                                      document['price'])
+                                                  .toString(),
+                                          style: font20Black,
+                                        ),
+                                      );
+                                    }).toList(),
+                                  );
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -369,49 +593,115 @@ class _DashboardState extends State<Dashboard> {
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('Your waiting number is',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 20.0)),
-                    Text('VIP 01',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 80.0)),
-                    Text('27/09/2019',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 20.0)),
-                  ]),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    ReCase('your waiting number is').sentenceCase,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  Text(
+                    'VIP ' + (waitingVIPNumber + 1).toString(),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 80.0,
+                    ),
+                  ),
+                  Text(
+                    DateFormat('dd/MM/y').format(DateTime.now()),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                ],
+              ),
             ),
+            onTap: isConnected
+                ? () {
+                    setState(() {
+                      waitingVIPNumber = waitingVIPNumber + 1;
+                    });
+                    String waitingVIP = '\x1B@\x1DV1\r\n' +
+                        '------------------------------------------------' +
+                        '             Your waiting number is             ' +
+                        '            VIP Customer No. ${waitingNumberFormatter(waitingVIPNumber)}            ' +
+                        '        Date:  ${DateFormat.yMEd().add_jms().format(DateTime.now())}        ' +
+                        '------------------------------------------------' +
+                        '\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n' +
+                        '\x1B@\x1DV1';
+                    return _sendMessage(waitingVIP);
+                  }
+                : () {
+                    showDialog(
+                      context: context,
+                      builder: (_) {
+                        return PrinterNotFoundDialog();
+                      },
+                    );
+                  },
           ),
           _buildTile(
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('Your waiting number is',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 20.0)),
-                    Text('01',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 80.0)),
-                    Text('27/09/2019',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 20.0)),
-                  ]),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    ReCase('your waiting number is').sentenceCase,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  Text(
+                    (waitingSimpleNumber + 1).toString(),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 80.0,
+                    ),
+                  ),
+                  Text(
+                    DateFormat('dd/MM/y').format(DateTime.now()),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                ],
+              ),
             ),
+            onTap: isConnected
+                ? () {
+                    setState(() {
+                      waitingSimpleNumber = waitingSimpleNumber + 1;
+                    });
+                    String waitingSimple = '\x1B@\x1DV1\r\n' +
+                        '------------------------------------------------' +
+                        '             Your waiting number is             ' +
+                        '              Customer No. ${waitingNumberFormatter(waitingSimpleNumber)}              ' +
+                        '        Date:  ${DateFormat.yMEd().add_jms().format(DateTime.now())}        ' +
+                        '------------------------------------------------' +
+                        '\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n' +
+                        '\x1B@\x1DV1';
+                    return _sendMessage(waitingSimple);
+                  }
+                : () {
+                    showDialog(
+                      context: context,
+                      builder: (_) {
+                        return PrinterNotFoundDialog();
+                      },
+                    );
+                  },
           ),
         ],
         staggeredTiles: [

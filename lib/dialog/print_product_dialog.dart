@@ -7,7 +7,7 @@ import 'package:printing/printing.dart';
 import 'package:recase/recase.dart';
 
 import '../env.dart';
-import '../functions/firebase_firestore.dart';
+import '../functions/database.dart';
 import '../themes/helpers/buttons.dart';
 import '../themes/helpers/theme_colors.dart';
 
@@ -26,8 +26,10 @@ class PrintProductDialog extends StatelessWidget {
     @required this.setDate,
     @required this.endDate,
   }) : super(key: key);
-  final DateTime setDate;
+
   final DateTime endDate;
+  final DateTime setDate;
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -106,7 +108,7 @@ class PrintProductDialog extends StatelessWidget {
                               },
                             );
                           },
-                          textButton: 'Print',
+                          textButton: ReCase('print').titleCase,
                           colorButton: confirmColor,
                         ),
                       ],

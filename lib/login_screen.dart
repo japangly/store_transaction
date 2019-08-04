@@ -4,12 +4,12 @@ import 'package:flutter/widgets.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:recase/recase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:store_transaction/reset_password.dart';
 
 import 'dashboard.dart';
 import 'dialog/email_not_found_dialog.dart';
 import 'env.dart';
-import 'functions/authenticate.dart';
+import 'functions/auth.dart';
+import 'reset_password.dart';
 import 'themes/helpers/fonts.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -21,9 +21,15 @@ TextEditingController emailTextController = TextEditingController();
 TextEditingController passwordTextController = TextEditingController();
 
 class _LoginState extends State<LoginScreen> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   SharedPreferences sharedPreferences;
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _loadingState = false;
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -35,15 +41,15 @@ class _LoginState extends State<LoginScreen> {
       _loadingState = true;
     });
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await Authenticate()
+    await Authentication()
         .signIn(
       email: emailTextController.text.toLowerCase().trim(),
       password: passwordTextController.text,
     )
-        .then((token) {
+        .then((uid) {
       sharedPreferences.setString(
-        'keyUserId',
-        token,
+        'uid',
+        uid,
       );
       sharedPreferences.setString(
         'email',
@@ -56,7 +62,7 @@ class _LoginState extends State<LoginScreen> {
     }).whenComplete(() {
       emailTextController.clear();
       passwordTextController.clear();
-      sharedPreferences.getString('keyUserId') != null
+      sharedPreferences.getString('uid') != null
           ? Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => Dashboard()),
               (Route<dynamic> route) => false)
@@ -232,10 +238,5 @@ class _LoginState extends State<LoginScreen> {
           inAsyncCall: _loadingState,
           progressIndicator: CircularProgressIndicator()),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }
