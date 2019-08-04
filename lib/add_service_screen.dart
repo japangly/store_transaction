@@ -101,7 +101,7 @@ class _AddServiceState extends State<AddService> {
                                   children: <Widget>[
                                     AutoSizeText(
                                       'Staff Name',
-                                      minFontSize: 24.0,
+                                      minFontSize: .0,
                                     ),
                                     IconButton(
                                       icon: Icon(
