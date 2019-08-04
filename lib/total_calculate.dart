@@ -177,48 +177,48 @@ class _ListTotalState extends State<ListTotal> {
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: FloatingActionButton(
+              backgroundColor: pinkColor,
+              heroTag: 's1',
+              elevation: 5.0,
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (_) {
+                      return ReceiptDialog();
+                    });
+              },
+              child: Icon(
+                Icons.print,
+                size: 24.0,
+              ),
+            ),
+          ),
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(right: 12.0),
+                padding: const EdgeInsets.only(bottom: 8.0),
                 child: FloatingActionButton(
                   backgroundColor: pinkColor,
-                  heroTag: 's1',
+                  heroTag: 's2',
                   elevation: 5.0,
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (_) {
-                          return ReceiptDialog();
-                        });
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => AddService(),
+                      ),
+                    );
                   },
                   child: Icon(
-                    Icons.print,
+                    Icons.content_cut,
                     size: 24.0,
                   ),
-                ),
-              ),
-            ],
-          ),
-          AnimatedFloatingActionButton(
-            fabButtons: <Widget>[
-              FloatingActionButton(
-                backgroundColor: pinkColor,
-                heroTag: 's2',
-                elevation: 5.0,
-                onPressed: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => AddService(),
-                    ),
-                  );
-                },
-                child: Icon(
-                  Icons.content_cut,
-                  size: 24.0,
                 ),
               ),
               FloatingActionButton(
@@ -239,9 +239,6 @@ class _ListTotalState extends State<ListTotal> {
                 ),
               ),
             ],
-            colorStartAnimation: confirmColor,
-            colorEndAnimation: removeColor,
-            animatedIconData: AnimatedIcons.menu_close,
           ),
         ],
       ),
