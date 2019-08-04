@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'env.dart';
 
 class ServicePriceCard extends StatefulWidget {
-  final DocumentSnapshot documentService;
-  final DocumentSnapshot documentEmployee;
+  // final DocumentSnapshot documentService;
+  // final DocumentSnapshot documentEmployee;
   const ServicePriceCard({
     Key key,
-    @required this.documentService,
-    @required this.documentEmployee,
+    // @required this.documentService,
+    // @required this.documentEmployee,
   }) : super(key: key);
 
   @override
@@ -38,38 +38,38 @@ class _ServicePriceCardState extends State<ServicePriceCard> {
                   elevation: 4.0,
                   child: Padding(
                     padding:
-                        const EdgeInsets.fromLTRB(128.0, 72.0, 128.0, 32.0),
+                        const EdgeInsets.fromLTRB(128.0, 170.0, 128.0, 32.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
-                        Column(
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(top: 32.0),
-                              child: AutoSizeText(
-                                widget.documentService.data['name'],
-                                minFontSize: 32.0,
-                                maxFontSize: 256.0,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 16.0),
-                              child: AutoSizeText(
-                                widget.documentService.data['category'],
-                                minFontSize: 24.0,
-                                maxFontSize: 256.0,
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                            ),
-                          ],
+                        AutoSizeText(
+                          // widget.productDocument.data['name'],
+                          'Services Name',
+                          minFontSize: 36.0,
+                          maxFontSize: 256.0,
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: AutoSizeText(
-                            '${widget.documentEmployee.data['last name']} ${widget.documentEmployee.data['first name']}',
-                            minFontSize: 24.0,
-                            maxFontSize: 256.0,
+                          child: Column(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: AutoSizeText(
+                                  // widget.productDocument.data['name'],
+                                  'By',
+                                  minFontSize: 24.0,
+                                  maxFontSize: 256.0,
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ),
+                              AutoSizeText(
+                                // '${widget.documentEmployee.data['last name']} ${widget.documentEmployee.data['first name']}',
+                                'Staff Name',
+                                minFontSize: 24.0,
+                                maxFontSize: 256.0,
+                              ),
+                            ],
                           ),
                         ),
                         Padding(
@@ -85,7 +85,8 @@ class _ServicePriceCardState extends State<ServicePriceCard> {
                                 style: TextStyle(color: Colors.redAccent),
                               ),
                               AutoSizeText(
-                                widget.documentService.data['price'].toString(),
+                                // widget.documentService.data['price'].toString(),
+                                '200',
                                 minFontSize: 64.0,
                                 maxFontSize: 256.0,
                                 style: TextStyle(
@@ -115,8 +116,8 @@ class _ServicePriceCardState extends State<ServicePriceCard> {
               ),
               child: Image.network(
                 'https://sleepmatters.ie/wp-content/uploads/2018/05/Child-Bath-Every-Night.jpg',
-                height: Environment().getHeight(height: 10.0),
-                width: Environment().getWidth(width: 8.0),
+                height: Environment().getHeight(height: 16.0),
+                width: Environment().getWidth(width: 12.0),
                 fit: BoxFit.fitHeight,
                 scale: 30.0,
               ),

@@ -13,10 +13,9 @@ List<String> _listEmployee = [
 ];
 
 class SaleItemCard extends StatefulWidget {
-  final DocumentSnapshot item;
+  // final DocumentSnapshot item;
   const SaleItemCard({
     Key key,
-    @required this.item,
   }) : super(key: key);
 
   @override
@@ -25,13 +24,13 @@ class SaleItemCard extends StatefulWidget {
 
 class _SaleItemCardState extends State<SaleItemCard> {
   int priceItem = 0;
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      priceItem = widget.item.data['sale price'];
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   setState(() {
+  //     priceItem = widget.item.data['sale price'];
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -53,39 +52,31 @@ class _SaleItemCardState extends State<SaleItemCard> {
                   elevation: 4.0,
                   child: Padding(
                     padding:
-                        const EdgeInsets.fromLTRB(128.0, 100.0, 128.0, 8.0),
+                        const EdgeInsets.fromLTRB(128.0, 170.0, 128.0, 8.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         AutoSizeText(
-                          widget.item.data['name'],
-                          minFontSize: 32.0,
+                          // widget.productDocument.data['name'],
+                          'Item Name',
+                          minFontSize: 36.0,
                           maxFontSize: 256.0,
                           style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: AutoSizeText(
-                            widget.item.data['category'],
-                            minFontSize: 24.0,
-                            maxFontSize: 256.0,
-                            style: TextStyle(color: Colors.grey),
-                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: CounterPlugin(
                             initialValue: _defaultValue,
                             minValue: 1,
-                            maxValue: widget.item.data['in stock'],
+                            maxValue: 12,
                             step: 1,
                             buttonSize: 32.0,
                             decimalPlaces: 3,
                             onChanged: (value) {
                               setState(() {
                                 _defaultValue = value;
-                                priceItem =
-                                    value * widget.item.data['sale price'];
+                                // priceItem =
+                                //     value * widget.item.data['sale price'];
                               });
                             },
                           ),
@@ -152,9 +143,10 @@ class _SaleItemCardState extends State<SaleItemCard> {
                 Radius.circular(16.0),
               ),
               child: Image.network(
-                widget.item.data['image'],
-                height: Environment().getHeight(height: 10.0),
-                width: Environment().getWidth(width: 8.0),
+                // widget.item.data['image'],
+                'https://groceries.morrisons.com/productImages/381/381011011_0_640x640.jpg?identifier=30dc1370e517daf1fe1b9b269ad5d13a',
+                height: Environment().getHeight(height: 16.0),
+                width: Environment().getWidth(width: 12.0),
                 fit: BoxFit.fill,
               ),
             ),

@@ -11,6 +11,7 @@ import 'functions/database.dart';
 import 'helper/search_library.dart';
 import 'item_sale.dart';
 import 'sale_card.dart';
+import 'service_card.dart';
 import 'themes/helpers/theme_colors.dart';
 
 class ListTotal extends StatefulWidget {
@@ -73,10 +74,10 @@ class _ListTotalState extends State<ListTotal> {
                       return value.data['name'].toLowerCase().trim().contains(
                           RegExp(r'' + criteria.toLowerCase().trim() + ''));
                     },
-                    onSelect: (DocumentSnapshot value) {
-                      cardItem.add(SaleItemCard(item: value));
-                      Navigator.of(context, rootNavigator: true).pop();
-                    },
+                    // onSelect: (DocumentSnapshot value) {
+                    //   cardItem.add(SaleItemCard(item: value));
+                    //   Navigator.of(context, rootNavigator: true).pop();
+                    // },
                     onSubmit: (String value) =>
                         Navigator.of(context).pop(value),
                   ),
@@ -124,52 +125,13 @@ class _ListTotalState extends State<ListTotal> {
         },
         child: Column(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 64.0, right: 64.0, top: 32.0, bottom: 32.0),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8.0),
-                  ),
-                ),
-                elevation: 4.0,
-                child: TextField(
-                  onChanged: (value) async {
-                    if (_barcode.text != '') {
-                      Database()
-                          .getCollectionByField(
-                        collection: 'products',
-                        field: 'barcode',
-                        value: _barcode.text,
-                      )
-                          .then((onValue) {
-                        if (onValue == null) {
-                          print('product null');
-                        } else {
-                          cardItem.add(SaleItemCard(
-                            item: onValue,
-                          ));
-                        }
-                      });
-                    }
-                  },
-                  autofocus: true,
-                  controller: _barcode,
-                  decoration: InputDecoration(
-                    labelText: "Barcode",
-                    labelStyle: TextStyle(fontSize: 24.0),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                ),
-              ),
-            ),
             Flexible(
               child: ListView(
                 scrollDirection: Axis.horizontal,
-                children: cardItem,
+                children: <Widget>[
+                  SaleItemCard(),
+                  ServicePriceCard(),
+                ],
               ),
             ),
           ],
