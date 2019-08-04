@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'env.dart';
@@ -12,6 +11,9 @@ class ServicePriceCard extends StatefulWidget {
     // @required this.documentService,
     // @required this.documentEmployee,
   }) : super(key: key);
+
+  // final DocumentSnapshot documentEmployee;
+  // final DocumentSnapshot documentService;
 
   @override
   _ServicePriceCardState createState() => _ServicePriceCardState();
