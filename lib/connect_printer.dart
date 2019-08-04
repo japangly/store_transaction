@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:recase/recase.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'splash_screen.dart';
+import 'package:store_transaction/splash_screen.dart';
 
 import 'themes/helpers/fonts.dart';
 
@@ -8,8 +13,20 @@ class ConnectPrinterScreen extends StatefulWidget {
 }
 
 class _ConnectPrinterScreenState extends State<ConnectPrinterScreen> {
-  DateTime _startDate;
-  DateTime _endDate;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  SharedPreferences sharedPreferences;
+  TextEditingController _bluetoothAddress = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _getSharePreference();
+  }
+
+  Future _getSharePreference() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,7 +39,7 @@ class _ConnectPrinterScreenState extends State<ConnectPrinterScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: 15.0),
                 child: Text(
-                  'Printer Setting',
+                  ReCase('printer setting').titleCase,
                   style: font20White,
                 ),
               ),
@@ -37,15 +54,28 @@ class _ConnectPrinterScreenState extends State<ConnectPrinterScreen> {
                 padding: const EdgeInsets.all(150.0),
                 child: Row(
                   children: <Widget>[
-                    Expanded(
-                      flex: 5,
-                      child: TextFormField(
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          labelText: 'Input printer address',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
+                    Form(
+                      key: _formKey,
+                      child: Expanded(
+                        flex: 5,
+                        child: TextFormField(
+                          controller: _bluetoothAddress,
+                          keyboardType: TextInputType.text,
+                          decoration: InputDecoration(
+                            labelText:
+                                ReCase('input printer address').sentenceCase,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return ReCase(
+                                'please enter the printer address',
+                              ).sentenceCase;
+                            }
+                            return null;
+                          },
                         ),
                       ),
                     ),
@@ -62,12 +92,30 @@ class _ConnectPrinterScreenState extends State<ConnectPrinterScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            new Text(
-                              "Connect",
+                            Text(
+                              ReCase('connect').titleCase,
                             ),
                           ],
                         ),
-                        onPressed: () {},
+                        onPressed: () async {
+                          if (_formKey.currentState.validate()) {
+                            await sharedPreferences
+                                .setString(
+                              'bluetoothAddress',
+                              _bluetoothAddress.text,
+                            )
+                                .whenComplete(() {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                    return SplashScreen();
+                                  },
+                                ),
+                              );
+                            });
+                          }
+                        },
                       ),
                     ),
                   ],

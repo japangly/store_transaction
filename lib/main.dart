@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:store_transaction/dashboard.dart';
+import 'package:flutter/services.dart';
 
-void main() {
-  runApp(
-    MaterialApp(
-      title: 'Material App',
-      home: Dashboard(),
-    ),
+import 'splash_screen.dart';
+
+void main() async {
+  ///
+  /// Force the layout to Orientati on Landscape mode
+  ///
+  ///
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]).then(
+    (_) {
+      runApp(
+        MaterialApp(
+          title: 'Material App',
+          home: SplashScreen(),
+        ),
+      );
+    },
   );
 }

@@ -1,8 +1,10 @@
 import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'dashboard.dart';
 import 'login_screen.dart';
 import 'themes/helpers/buttons.dart';
@@ -27,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void initSharePreference() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    token = sharedPreferences.getString('keyUserId');
+    token = sharedPreferences.getString('uid');
   }
 
   @override
@@ -64,7 +66,7 @@ class _DecisionRouteState extends State<DecisionRoute> {
 
   void getTokenFromSharePreference() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    token = sharedPreferences.getString('keyUserId');
+    token = sharedPreferences.getString('uid');
   }
 
   checkInternetConnection() async {

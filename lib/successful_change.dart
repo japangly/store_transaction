@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
+import 'package:recase/recase.dart';
 import 'package:store_transaction/themes/helpers/theme_colors.dart' as prefix0;
+
+import 'login_screen.dart';
 
 class SuccessChangedScreen extends StatefulWidget {
   @override
@@ -19,18 +22,29 @@ class _SuccessChangedScreenState extends State<SuccessChangedScreen> {
         body: Container(
           height: double.infinity,
           decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                  stops: [0.1, 0.3],
-                  colors: [Colors.pinkAccent, Colors.white])),
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              stops: [
+                0.1,
+                0.3,
+              ],
+              colors: [
+                Colors.pinkAccent,
+                Colors.white,
+              ],
+            ),
+          ),
           child: Padding(
-            padding: const EdgeInsets.only(right: 200.0, left: 200.0),
+            padding: const EdgeInsets.only(
+              right: 200.0,
+              left: 200.0,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  'Successful password changed!',
+                  ReCase('successful password changed!').sentenceCase,
                   style: TextStyle(
                       fontFamily: 'Realistica',
                       fontSize: 30.0,
@@ -39,14 +53,22 @@ class _SuccessChangedScreenState extends State<SuccessChangedScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 40.0, bottom: 30.0),
                   child: Text(
-                    'You can now use your new password to log in to your account!',
-                    style: TextStyle(fontSize: 15.0, color: prefix0.blackColor),
+                    ReCase('you can now use your new password to log in to your account!')
+                        .sentenceCase,
+                    style: TextStyle(
+                      fontSize: 15.0,
+                      color: prefix0.blackColor,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
-                      top: 20.0, bottom: 10.0, left: 50.0, right: 50.0),
+                    top: 20.0,
+                    bottom: 10.0,
+                    left: 50.0,
+                    right: 50.0,
+                  ),
                   child: Row(
                     children: <Widget>[
                       Expanded(
@@ -61,13 +83,22 @@ class _SuccessChangedScreenState extends State<SuccessChangedScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              new Text(
-                                "Login",
+                              Text(
+                                ReCase('login').titleCase,
                               ),
                               Icon(Icons.arrow_forward)
                             ],
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return LoginScreen();
+                                },
+                              ),
+                              (Route<dynamic> route) => false,
+                            );
+                          },
                         ),
                       ),
                     ],

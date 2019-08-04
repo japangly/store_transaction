@@ -6,7 +6,7 @@ import 'package:recase/recase.dart';
 
 import 'add_service_screen.dart';
 import 'dialog/receipt_dialog.dart';
-import 'functions/firebase_firestore.dart';
+import 'functions/database.dart';
 import 'helper/search_library.dart';
 import 'sale_card.dart';
 import 'themes/helpers/theme_colors.dart';
@@ -26,7 +26,6 @@ class _ListTotalState extends State<ListTotal> {
   List<Widget> cardItem = addService;
 
   TextEditingController _barcode = TextEditingController();
-  final _formKey = new GlobalKey<FormState>();
   String _name = 'No one';
   FocusNode _textFocus = new FocusNode();
 

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'dialog/stock_dialog.dart';
 import 'env.dart';
-import 'functions/firebase_firestore.dart';
+import 'functions/database.dart';
 import 'helper/counter.dart';
 import 'sale_card.dart';
 import 'themes/helpers/theme_colors.dart';
@@ -13,34 +13,16 @@ int _defaultValue = 1;
 String _selectedName = 'NAME';
 
 class ConfirmDeductFromStock extends StatefulWidget {
-  const ConfirmDeductFromStock({Key key, @required this.employeesList})
-      : super(key: key);
-
-  final List<DocumentSnapshot> employeesList;
+  const ConfirmDeductFromStock({Key key}) : super(key: key);
 
   @override
   _ConfirmDeductFromStockState createState() => _ConfirmDeductFromStockState();
 }
 
 class _ConfirmDeductFromStockState extends State<ConfirmDeductFromStock> {
-  TextEditingController _barcode = TextEditingController();
-  List<String> employeesName = [];
   List<Widget> cardItem = [];
-
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.employeesList.length > 0) {
-      for (int em = 0; em < widget.employeesList.length; em++) {
-        String name =
-            '${widget.employeesList[em].data['last name']} ${widget.employeesList[em].data['first name']}';
-        setState(() {
-          employeesName.add(name);
-        });
-      }
-    }
-  }
+  List<String> employeesName = [];
+  TextEditingController _barcode = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +42,7 @@ class _ConfirmDeductFromStockState extends State<ConfirmDeductFromStock> {
         child: Form(
           onChanged: () async {
             if (_barcode.text != '') {
-             await Database()
+              await Database()
                   .getCollectionByField(
                 collection: 'products',
                 field: 'barcode',
@@ -142,8 +124,8 @@ class DeductStockCard extends StatefulWidget {
     @required this.employeesName,
   }) : super(key: key);
 
-  final DocumentSnapshot productDocument;
   final List<String> employeesName;
+  final DocumentSnapshot productDocument;
 
   @override
   _DeductStockCardState createState() => _DeductStockCardState();
@@ -152,6 +134,7 @@ class DeductStockCard extends StatefulWidget {
 class _DeductStockCardState extends State<DeductStockCard> {
   List<String> employeeName = [];
   int priceItem = 0;
+
   @override
   void initState() {
     super.initState();
